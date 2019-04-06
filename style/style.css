@@ -1,0 +1,39 @@
+div.cabecalho{
+    height: 55.285px;
+    background-color: #24292e;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+div.corpo{
+    height: 631px;
+    background-image: url(https://github.githubassets.com/images/modules/site/heroes/simple-codelines.svg);
+    background-color: #2b3137;
+}
+
+div.rodape{
+    height: 277px;
+    background-color: white;
+}
+
+div.cabe_01{
+    height: 56px;
+    width: 1248px;
+    padding-left: 16px;
+    padding-right: 16px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+span.git_photo{
+    height: 32px;
+    width: 32px;
+    margin-top: 11px;
+    margin-bottom: 2px;
+    margin-right: 22px;
+}
+
+body{
+    margin: 0px;
+
+}
