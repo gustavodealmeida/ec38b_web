@@ -4,10 +4,17 @@
 
 
 h1{
-    font-family: Inter;
+    font-family: Inter, -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
     font-weight: 500;
     margin-bottom: 16px;
     color: white;
+    font-size: 64px;
+    line-height: 1;
+}
+
+/*Display padrao para <div>*/
+div{
+    display: block;
 }
 
 div.cabecalho{
@@ -18,15 +25,27 @@ div.cabecalho{
 }
 
 div.corpo{
-    margin: auto;
-    height: 631px;
+    /*margin: auto;*/
+    /*height: 631px;*/
     background-image: url(https://github.githubassets.com/images/modules/site/heroes/simple-codelines.svg);
     background-color: #2b3137;
     background-size: cover;
-    padding: 64px 16px 16px 64px;
-    display: block;
     position: relative;
+}
 
+.teste{
+    background-position: center 10%;
+    background-size: cover;
+    padding: 64px 0px;
+
+}
+
+.parte-centro{
+    margin: auto;
+    word-wrap: break-word;
+    max-width: 1012px;
+    display: flex;
+    align-items: center;
 }
 
 div.rodape{
@@ -67,7 +86,7 @@ body{
     color: white;
     width: 58.3333%;
     height: auto;
-    font-family: Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+    font-family:    -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
     font-weight: 500;
 }
 
@@ -85,7 +104,7 @@ button.Sign-Up{
     border: 1px solid #2EBC4F;
     border-radius: 3px;
     padding: 20px 32px;
-    margin: 16px 0px;
+    margin: 32px 0px 16px 0px;
     font-size: 16px;
     font-weight: 500;
     width: 100%;
@@ -99,20 +118,21 @@ form{
     background: white;
     border-radius: 5px;
     margin-top: 16px;
-    width: 30%;
     height: auto;
     font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
 }
 
 .formulario{
+    width: 50%;
     padding-left: 0 24px 0 24px;
     margin: auto;
 }
 
 .formulario-texto{
     font-size: 12px;
+
     margin-bottom: 0;
-    margin-top: 5px;
+    margin-top: -10px;
     color: #24292e;
     font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
 }
@@ -133,6 +153,8 @@ input{
     padding: 10px;
     background-color: #fafbfc;
     margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 15px;
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
@@ -144,6 +166,8 @@ label.formulario{
     text-align: left;
     position: static;
     margin-top: 15px;
+    color: #24292e;
+    font-weight: 600;
 }
 
 .link-built-developers{
@@ -157,14 +181,7 @@ a{
     text-decoration: none;
 }
 
-.parte-centro{
-    margin-left: -24px;
-    margin-right: -24px;
-    max-width: 1012px;
-    display: inline;
-    align-items: center;
 
-}
 
 @media (min-width: 768px){
     div{
