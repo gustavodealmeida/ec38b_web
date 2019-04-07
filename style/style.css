@@ -22,10 +22,10 @@ div{
 }
 
 div.cabecalho{
-    height: 55.285px;
+    height: 72px;
     background-color: #24292e;
-    padding-top: 8px;
-    padding-bottom: 8px;
+    padding: 0px;
+
 }
 
 div.corpo{
@@ -94,6 +94,7 @@ h2.h2_roda{
 }
 
 p.p_01{
+    width: 737px;
     margin-bottom: 16px;
     text-align: center;
     box-sizing: border-box;
@@ -145,17 +146,18 @@ a.a_02{
 }
 
 div.cabe_01{
-    height: 56px;
-    width: 1248px;
+    height: 72px;
+    width: 95%;
     padding-left: 16px;
     padding-right: 16px;
+    padding-top: 16px;
+    padding-bottom: 16px;
     margin-left: auto;
     margin-right: auto;
 }
 
 ul.ul_01{
     list-style-type: none;
-    width: 410px;
     margin: 0;
     padding: 0;
     overflow: hidden;
@@ -165,6 +167,10 @@ ul.ul_01{
 
 li.li_01{
     float: left;
+}
+
+li.li_02{
+    float: right;
 }
 
 a.a_a1{
@@ -195,6 +201,12 @@ span.teste{
 
 span.teste2{
     color: transparent;
+}
+
+div.teste22{
+    height: 30px;
+    width: 100%;
+    background-color: gray;
 }
 
 
