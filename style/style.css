@@ -1,3 +1,7 @@
+body{
+    margin: 0px;
+}
+
 div.cabecalho{
     height: 55.285px;
     background-color: #24292e;
@@ -7,13 +11,97 @@ div.cabecalho{
 
 div.corpo{
     height: 631px;
-    background-image: url(https://github.githubassets.com/images/modules/site/heroes/simple-codelines.svg);
+    background-image: url(https://github.githubassets.com/images/modules/site/heroes/simple-codelines.svg);   
     background-color: #2b3137;
+    background-position: center 10%;
+    background-size: cover;
 }
 
 div.rodape{
     height: 277px;
-    background-color: white;
+    background-color: #fff;
+    background-image: url(../images/bolinhas.jpg);
+    background-position: center 10%;
+}
+
+div.roda_01{
+    height: 277px;
+    width: 980px;
+    padding-left: 16px;
+    padding-right: 16px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+div.roda_02{
+    height: 195px;
+    width: 737px;
+    padding: 40px;
+    margin-left: 82px;
+    margin-right: 82px;
+}
+
+h2.h2_roda{
+    color: #242931;
+    font-size: 32px;
+    text-align: center;
+    font-weight: 500;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    box-sizing: border-box;
+    line-height: 1.5;
+    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+}
+
+p.p_01{
+    margin-bottom: 16px;
+    text-align: center;
+    box-sizing: border-box;
+    margin-top: 0;
+    color: #586069;
+    font-size: 16px;
+    line-height: 1.5;
+    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+}
+
+p.p_02{
+    height: 58px;
+    margin-bottom: 10px;
+    text-align: center;
+    box-sizing: border-box;
+    margin-top: 0;
+    line-height: 1.5;
+}
+
+p.p_03{
+    margin-top: 0;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+a.a_01{
+    background-color: #1074e7;
+    border: 1px solid #1074e7;
+    border-radius: 3px;
+    color: #fff;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 16px 24px;
+    user-select: none;
+    vertical-align: middle;
+    white-space: nowrap;
+    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+}
+
+a.a_02{
+    color: #0366d6;
+    text-align: center;
+    box-sizing: border-box;
+    background-color: transparent;
+    font-size: 16px;
+    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+    line-height: 1.5;
 }
 
 div.cabe_01{
@@ -25,15 +113,51 @@ div.cabe_01{
     margin-right: auto;
 }
 
-span.git_photo{
-    height: 32px;
-    width: 32px;
-    margin-top: 11px;
-    margin-bottom: 2px;
-    margin-right: 22px;
+ul.ul_01{
+    list-style-type: none;
+    width: 410px;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: transparent;
+    display: inline;
 }
 
-body{
-    margin: 0px;
-
+li.li_01{
+    float: left;
 }
+
+a.a_a1{
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 16px 8px;
+    text-decoration: none;
+    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+    line-height: 1.5;
+    font-size: 16px;
+}
+
+a.a_aa{
+    display: block;
+    color: white;
+    text-align: center;
+    padding-top: 9px;
+    text-decoration: none;
+    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+    line-height: 1.5;
+    font-size: 16px;
+}
+
+span.teste{
+    color: darkgray;
+}
+
+span.teste2{
+    color: transparent;
+}
+
+
+
+
+
