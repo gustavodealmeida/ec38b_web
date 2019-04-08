@@ -386,12 +386,12 @@ a{
 @media (max-width: 768px){
     .built-developers{
         text-align: center;
-        display: inline;
+        
         width: 100%;
     }
     .corpo{
         align-items: center;
-        height: 750px;
+        height: 500px;
     }
     .parte-centro{
         align-items: center;
@@ -401,16 +401,12 @@ a{
     button.after{
         width: 66.67%;
         display: block;
-        margin: auto; 
+        margin: auto;  
     }
     .formulario2{
         display: none;
     }
-    .formulario{
-        align-items: center;
-        display: inline;
-        width: 100%;
-    }
+   
     div.roda_01{
         height: 277px;
         width: 100%;
