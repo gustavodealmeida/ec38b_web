@@ -66,7 +66,7 @@ div.rodape{
 
 div.roda_01{
     height: 277px;
-    width: 980px;
+    width: 80%;
     padding-left: 16px;
     padding-right: 16px;
     margin-left: auto;
@@ -75,7 +75,7 @@ div.roda_01{
 
 div.roda_02{
     height: 195px;
-    width: 737px;
+    width: 80%;
     padding: 40px;
     margin-left: 82px;
     margin-right: 82px;
@@ -94,7 +94,7 @@ h2.h2_roda{
 }
 
 p.p_01{
-    width: 737px;
+    width: 100%;
     margin-bottom: 16px;
     text-align: center;
     box-sizing: border-box;
@@ -148,8 +148,8 @@ a.a_02{
 div.cabe_01{
     height: 72px;
     width: 95%;
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-left: 2%;
+    padding-right: 2%;
     padding-top: 16px;
     padding-bottom: 16px;
     margin-left: auto;
@@ -173,6 +173,16 @@ li.li_02{
     float: right;
 }
 
+li.li_02up{
+    float: right;
+    margin-top: 4px;
+}
+
+li.li_02ap{
+    float: right;
+    display: none;
+}
+
 a.a_a1{
     display: block;
     color: white;
@@ -182,6 +192,19 @@ a.a_a1{
     font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
     line-height: 1.5;
     font-size: 16px;
+}
+
+a.a_a1up{
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 4px 8px;
+    text-decoration: none;
+    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+    line-height: 1.5;
+    font-size: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.699); 
+    border-radius: 2px; 
 }
 
 a.a_aa{
@@ -324,11 +347,96 @@ a{
     text-decoration: none;
 }
 
+@media (max-width: 1030px){
+    li.li_01{
+        display: none;
+    }
+
+    #sumir{
+        display: none;
+    }
+
+    li.li_02up{
+        float: right;
+        margin-top: 2px;
+    }
+
+    a.a_a1up{
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 4px 7px;
+        text-decoration: none;
+        font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+        line-height: 1.5;
+        font-size: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.699); 
+        border-radius: 5px; 
+    }
+
+    div.cabecalho{
+        height: 49px;
+    }
+
+    div.cabe_01{
+        height: 33px;
+        width: 90%;
+        padding-left: 0px;
+        padding-right: 0px;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    li.li_02ap{
+        padding-top: 6px;
+        padding-left: 32px;
+        display: inline;
+    }
+
+}
+
+@media (max-width: 768px){
+    div.roda_01{
+        height: 277px;
+        width: 100%;
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+    
+    div.roda_02{
+        height: 195px;
+        width: 100%;
+        padding: 10%px;
+        margin: 0px;
+    }
+
+    a.a_01{
+        background-color: #1074e7;
+        border: 1px solid #1074e7;
+        border-radius: 3px;
+        color: #fff;
+        display: inline-block;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 16px 24px;
+        width: 100%;
+        user-select: none;
+        vertical-align: middle;
+        white-space: nowrap;
+        font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+    }
+}
 
 
+
+
+/*
 @media (min-width: 768px){
     div{
         padding-left: 24px;
         padding-right: 24px;
     }
 }
+*/
