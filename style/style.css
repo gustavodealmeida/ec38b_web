@@ -220,6 +220,7 @@ div.corpo{
     background-position: center 10%;
     background-size: cover;
     padding: 64px 0;
+    overflow: hidden;
     /*margin: auto;*/
     /*height: 631px;*/
 }
@@ -231,9 +232,10 @@ div.teste{
 }
 
 .parte-centro{
-    word-wrap: break-word;
     align-items: center;
     display: flex;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .built-developers{
@@ -242,7 +244,6 @@ div.teste{
     padding-left: 24px;
     padding-right: 24px;
     text-align: left;
-    float: left;
     color: white;
     width: 58.3333%;
 }
@@ -270,7 +271,7 @@ button.Sign-Up{
     font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
 }
 
-button.after{
+button.responsivel{
     display: none;
 }
 
@@ -384,31 +385,15 @@ a{
 }
 
 @media (max-width: 768px){
-    .built-developers{
-        text-align: center;
-        
-        width: 100%;
+    h1{
+        font-size: 48px;
     }
     .corpo{
         align-items: center;
-        height: 500px;
-    }
-    .parte-centro{
-        align-items: center;
         padding: 0px;
-        display: inline;
+        
     }
-    button.after{
-        width: 66.67%;
-        display: block;
-        margin: auto;  
-    }
-    .formulario2{
-        display: none;
-    }
-   
     div.roda_01{
-        height: 277px;
         width: 100%;
         padding-left: 40px;
         padding-right: 40px;
@@ -421,19 +406,34 @@ a{
         margin: 0px;
     }
 
+    h2.h2_roda{
+        font-size: 26px;
+    }
+
     a.a_01{
-        background-color: #1074e7;
-        border: 1px solid #1074e7;
-        border-radius: 3px;
-        color: #fff;
-        display: inline-block;
-        font-size: 14px;
-        font-weight: 500;
-        padding: 16px 24px;
         width: 100%;
-        user-select: none;
-        vertical-align: middle;
-        white-space: nowrap;
-        font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+    }
+}
+
+@media (max-width: 544px){
+    .built-developers{
+        display: inline;
+        text-align: center;
+        width: 100%;
+    }
+    
+    
+    .parte-centro{
+        align-items: center;
+        padding: 0px;
+        display: inline;
+    }
+    .formulario{
+        display: none;
+    }
+    button.responsivel{
+        width: 41.5%;
+        display: block;
+        margin: auto;  
     }
 }
