@@ -10,9 +10,8 @@
         <link rel="stylesheet" type="text/css" href="style/style.css">
     </head>
     <body>
+        <!--Cabeçalho-->
         <div class="cabecalho">
-            <!--Cabeçalho-->
-        
             <div class="cabe_01">
         
                 <ul class="ul_01">
@@ -27,10 +26,21 @@
                                 src="images/v.jpg"></img></span></a></li>
                     <li class="li_02 ap"><a class="a_aa"><span><img src="images/menu.jpg"></img></span></a></li>
                     <li class="li_02 up"><a class="a_a1up">Sign up</a></li>
-                    <li class="li_02 some"><a class="a_a1" style="padding-left: 12px; padding-right: 12px;">Sign in</a></li>
-                    <li class="li_02 some" style="height: 41px"><a class="a_a1" style="padding: 0px;"><span
+                    <li class="li_02 some"><a class="a_a1" style="padding-left: 12px; padding-right: 12px;"
+                    href="screens/tela_login.html">Sign in</a></li>
+                    <li class="li_02 some">
+                        <a class="search">
+                            <form action="screens/tela_pubusca.html">
+                                <input type="text" class="search" placeholder="Search GitHub"/>
+                                <img src="images/barra.svg" class="search" alt="Buscar"/>
+                           </form>
+                        </a>
+
+                    </li>
+
+                <!--    <li class="li_02 some" style="height: 41px"><a class="a_a1" style="padding: 0px;"><span
                                 class="teste"></span><img src="images/search.jpg"></img></span></a></li>
-        
+                -->
                 </ul>
             </div>
         
@@ -47,7 +57,7 @@
                             GitHub is a development platform inspired by the way you work. From
                             <a href="" class="link-built-developers">open source</a> to <a href=""
                                 class="link-built-developers">business</a>, you
-                            can host and review code, manage projects, and build software alongside 31 million&nbsp;developers.
+                            can host and review code, manage projects, and build software alongside 36 million&nbsp;developers.
                         </p>
                     </div>
         
@@ -55,13 +65,13 @@
                         <div class="formulario2">
                             <form>
                                 <label class="formulario">Username</label>
-                                <input type="text" name="username" value="">
+                                <input class="corpo" type="text" name="username" value="">
         
                                 <label class="formulario">Email</label>
-                                <input type="text" name="email" value="">
+                                <input class="corpo" type="text" name="email" value="">
         
                                 <label class="formulario">Password</label>
-                                <input type="password" name="password" value="">
+                                <input class="corpo" type="password" name="password" value="">
         
                                 <p class="formulario-texto">Make sure it's <span>at least 15 characters</span> OR
                                     <span>at least 8 characters</span> <span>including a number</span> <span>and a lowercase
@@ -83,8 +93,8 @@
             </div>
         </div>
         
+        <!--Rodapé-->
         <div class="rodape">
-            <!--Rodapé-->
             <div class="roda_01">
                 <div class="roda_02">
                     <h2 class="h2_roda">Get started with GitHub Enterprise</h2>
