@@ -1,0 +1,23 @@
+{
+  "name": "projetoweb",
+  "version": "1.0.0",
+  "description": "\"# Projeto 1 - Programação WEB \"",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gustavodealmeida/ec38b_web.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gustavodealmeida/ec38b_web/issues"
+  },
+  "homepage": "https://github.com/gustavodealmeida/ec38b_web#readme",
+  "dependencies": {
+    "ejs": "^2.6.1"
+  }
+}

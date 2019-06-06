@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>Cadastro Usuario</title>
+
+        <meta http-equiv="content-Language" content="pt-br" charset="UTF-8">
+        <link rel="fluid-icon" herf="https://github.com/fluidicon.png" title="GitHub">
+        <title>The world’s leading software development platform · GitHub</title>
+        <meta name="description" content="GitHub brings together the world’s largest community of developers to discover,
+                                                    share, and build better software. From open source projects to private team repositories,
+                                                    we’re your all-in-one platform for collaborative development.">
+        <link rel="stylesheet" type="text/css" href="/style/style.css">
+
+    </head>
+
+    <body>
+        <!--Cabeçalho-->
+        <div class="cabecalho">
+            <div class="cabe_01">
+                <img src="/images/logo.jpg"></img>
+            </div>
+        </div>
+
+
+        <!--Div que alinha centralmente elementos da página-->
+        <div class="teste">
+            <div class="formulario"></div>
+            <h2>Cadastrar Usuario</h2>
+            <form action="get_usuario" method="POST">
+                <label class="formulario">Username</label>
+                <input class="corpo" type="text" name="username" value="<%= data.username %>">
+
+                <label class="formulario">Email</label>
+                <input class="corpo" type="text" name="email" value="<%= data.email %>">
+
+                <label class="formulario">Password</label>
+                <input class="corpo" type="password" name="password" value="<%= data.password %>">
+
+                <label class="formulario">Endereço</label>
+                <input class="corpo" type="text" name="endereco" value="">
+
+                <label class="formulario">Bairro</label>
+                <input class="corpo" type="text" name="bairro" value="">
+
+                <label class="formulario">Numero</label>
+                <input class="corpo" type="number" name="numero" value="">
+
+                <label class="formulario">Cidade</label>
+                <input class="corpo" type="text" name="cidade" value="">
+
+                <label class="formulario">Estado</label>
+                <input class="corpo" type="text" name="estado" value="">
+
+                <label class="formulario">CEP</label>
+                <input class="corpo" type="text" name="cep" value="">
+                <%= mensagem %>
+
+                <button class="Sign-Up">Sign Up for GitHub</button>
+            </form>
+        </div>
+
+        </div>
+
+    </body>
+
+</html>
