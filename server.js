@@ -49,14 +49,18 @@ app.post('/get_usuario', (req, res) => {
         user_info = new User(req.body),
         mensagem  = User.verificaCampos(user_info);
 
-        console.log(user_info);
         console.log(mensagem);
 
         if(mensagem==="Tudo Ok"){
             db.collection('user').insertOne(user_info, (err, result) => {
-                if (err) return console.log(err);
-                //console.log(result);
-                res.redirect('/cadastro_sucesso');
+                if (err){
+                    res.render('cadastro_usuario.ejs', { data: req.body, mensagem: "Username ou Email já cadastrado"});
+                    return console.log(err);
+                }else{
+                    console.log(result);
+                    res.redirect('/cadastro_sucesso');
+                }
+                
             });
         }else{
             res.render('cadastro_usuario.ejs', { data: req.body, mensagem: mensagem});
@@ -65,9 +69,6 @@ app.post('/get_usuario', (req, res) => {
 
 //Se cadastro for efetuado com sucesso, é redirecionado para essa página
 app.get('/cadastro_sucesso', (req, res)=>{
-    /*db.collection('user').find({ username: "mcaisçcahugflkajhbc"}).toArray((err, result) => {
-        console.log(result);
-    });*/
         res.render('cadastro_sucesso.ejs');
 })
 

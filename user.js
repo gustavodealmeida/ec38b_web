@@ -4,7 +4,13 @@ let config = require('./configMongoDB');
 Mongoclient.connect(config.uri, config.options, (err, client) => {
     if (err) return console.log(err);
     db = client.db('mydb');
+
+    //Garantindo unicidade dos indices username e email
+    db.collection('user').createIndex(
+        { username: 1, email: 1 },
+        { unique: true });
 });
+
 
 module.exports  = class User{
     constructor (data){
@@ -50,35 +56,7 @@ module.exports  = class User{
         if (User.endereco_completo.cep === "") {
             return "Campo CEP Vazio";
         }
-
-        return this.verificaUnicidade(User);
+        
+        return "Tudo Ok";
     }
-
-    static verificaUnicidade(User){
-        let mensagem = "Tudo Ok";
-
-       if (db.collection('user').findOne({ username : this.username})){
-           return "Username Indisponivel";
-       }
-/*
-       if (db.collection('user').find({ username : this.username})){
-           return "Username Indisponivel";
-       }
-        db.collection('user').find({ username: User.username }).toArray((err, result) => {
-            console.log(result);
-            if (result != []) {
-                mensagem = "Username já cadastrado";
-            }
-        });
-
-        /*db.collection('user').find({ email: User.email }, (err, result) => {
-            if (result != []) {
-                mensagem = "Email já cadastrado";
-            }
-        });*/
-
-        return mensagem;
-    }
-
-    
 }
