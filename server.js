@@ -54,7 +54,7 @@ app.route('/cadastro_usuario')
 app.post('/get_usuario', (req, res) => {
     let User = new require('./user'),
         user_info = new User(req.body),
-        mensagem  = User.save(user_info);
+        mensagem  = User.verificaCampos(user_info);
 
         console.log(mensagem);
 
