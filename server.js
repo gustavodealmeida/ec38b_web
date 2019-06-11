@@ -34,7 +34,7 @@ app.listen(3000, function(){})
 
 app.get('/', (req, res) =>
 {
-    //db.dropDatabase();
+    db.dropDatabase();
     res.render('tela_publicacao.ejs');
     console.log('drop');
 })
