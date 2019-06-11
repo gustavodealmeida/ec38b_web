@@ -2,6 +2,7 @@
 let express = require('express'),
     app = express(),
     path = require('path'),
+    router = express.Router();
     http = require('http');
 
 //Conexão com o MongoDB
@@ -15,6 +16,11 @@ Mongoclient.connect(config.uri, config.options, (err, client) => {
 //Utilziar metodo ObjectID do Mongo
 let ObjectId = require('mongodb').ObjectID;
 
+//Inicizaliado o servidor na porta 3000
+http.createServer(app).listen(3000, () => {
+    console.log('Servidor na porta 3000...')
+});
+
 //carregando o css e imagens no servidor
 app.use('/style', express.static(__dirname + '/style'));
 app.use('/images', express.static(__dirname + '/images'));
@@ -24,6 +30,7 @@ app.set('views', path.join(__dirname, '/views'));
 
 //Mandando configurações da View ejs
 app.set('view engine', 'ejs');
+app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 //Redirecionamento para a página principal
@@ -47,14 +54,14 @@ app.route('/cadastro_usuario')
 app.post('/get_usuario', (req, res) => {
     let User = new require('./user'),
         user_info = new User(req.body),
-        mensagem  = User.verificaCampos(user_info);
+        mensagem  = User.save(user_info);
 
         console.log(mensagem);
 
         if(mensagem==="Tudo Ok"){
             db.collection('user').insertOne(user_info, (err, result) => {
                 if (err){
-                    res.render('cadastro_usuario.ejs', { data: req.body, mensagem: "Username ou Email já cadastrado"});
+                    res.redirect('/cadastro_usuario', { data: user_info, mensagem: "Username ou Email já cadastrado"});
                     return console.log(err);
                 }else{
                     console.log(result);
@@ -72,8 +79,11 @@ app.get('/cadastro_sucesso', (req, res)=>{
         res.render('cadastro_sucesso.ejs');
 })
 
-
-
-http.createServer(app).listen(3000, () => {
-    console.log('Servidor na porta 3000...')
+//========= Funcoes de Login de Usuario =================
+app.get("/login_usuario", (req, res) =>{
+    res.render('tela_login');
 });
+
+
+
+

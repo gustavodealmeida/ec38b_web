@@ -13,17 +13,16 @@ Mongoclient.connect(config.uri, config.options, (err, client) => {
 
 
 module.exports  = class User{
-    constructor (data){
+    constructor(data) {
         this.username = data.username;
         this.email = data.email;
         this.password = data.password;
-        this.endereco_completo = {   endereco  : data.endereco,
-                            numero : data.numero,
-                            bairro  : data.bairro,
-                            cidade : data.cidade,
-                            estado : data.estado,
-                            cep : data.cep
-                        };
+        this.endereco = data.endereco;
+        this.numero = data.numero;
+        this.bairro = data.bairro;
+        this.cidade = data.cidade;
+        this.estado = data.estado;
+        this.cep = data.cep;
     }
 
     static verificaCampos(User){
@@ -38,25 +37,26 @@ module.exports  = class User{
         }
 
         //== Campos de endereco ==
-        if (User.endereco_completo.endereco === "") {
+        if (User.endereco === "") {
             return "Campo ENDEREÇO Vazio";
         }
-        if (User.endereco_completo.bairro === "") {
+        if (User.bairro === "") {
             return "Campo BAIRRO Vazio";
         }
-        if (User.endereco_completo.numero === "") {
+        if (User.numero === "") {
             return "Campo NUMERO Vazio";
         }
-        if (User.endereco_completo.cidade === "") {
+        if (User.cidade === "") {
             return "Campo CIDADE Vazio";
         }
-        if (User.endereco_completo.estado === "") {
+        if (User.estado === "") {
             return "Campo ESTADO Vazio";
         }
-        if (User.endereco_completo.cep === "") {
+        if (User.cep === "") {
             return "Campo CEP Vazio";
         }
         
         return "Tudo Ok";
     }
+
 }
