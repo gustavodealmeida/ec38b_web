@@ -50,15 +50,34 @@
         <div class="corpo2">
             <!--Colocando uma div a mais para teste-->
             <div class="teste2">
-                <div class="search_pub">
-                    <form action="busca">
-                        <input type="text" class="search_pub" placeholder="Search Files"/>
-                        <img src="../images/barra.svg" class="search" alt="Buscar"/>
-                    </form>
+                <div class="topo_busca">
+                    <div class="search_busca">
+                        <form action="/busca" method="post">
+                            <input type="text" class="search_busca" name="busca" placeholder="Search Files"/>
+                            <img src="../images/barra.svg" class="search" alt="Buscar"/>
+                        </form> 
+                    </div>
+                    
+                    <div>
+                        <form action="/tela_publicacao"><button class="Add" type="submit">Add File</button></form> 
+                    </div>
                 </div>
 
-                <h2>Olaaaaaaaaa</h2>
-                <h2>Eaeeeeee</h2>
+                <div class="busca_up">
+
+                <% data.forEach(function(details) 
+                { 
+                    %>
+                    <div class="img_up">
+                        <div><img src="../public/upload/<%= details.name %>" height="100" width="100"></img></div>
+                        <div style="display:flex; justify-content:center; align-items: center; margin-bottom: 10px; color: white; font-size: 14px"><span><%= details.name %></span></div>
+                    </div>
+                    <% 
+                }) 
+                %>
+
+                </div>
+
                 <!--
                 <form action="/pub" method="post" enctype="multipart/form-data">
                     <input type="file" name="filetoupload"><br>
