@@ -4,6 +4,7 @@ let express = require('express'),
     path = require('path'),
     router = express.Router();
     http = require('http'),
+    cookieParser = require('cookie-parser');
     multer  = require('multer');
     var upname, upusername = 1;
 
@@ -40,6 +41,10 @@ app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+
+//app.use('/tela_busca', indexRouter);
+//app.use('/users', usersRouter);
 
 //Redirecionamento para a página principal
 app.get('/', (req, res) => {
@@ -87,11 +92,39 @@ app.get('/cadastro_sucesso', (req, res)=>{
         res.render('cadastro_sucesso.ejs');
 })
 
-//========= Funcoes de Login de Usuario =================
-app.get("/login_usuario", (req, res) =>{
+//=========================== Funcoes de Login de Usuario =====================================
+//Configurações padrão de cookies
+
+
+app.get("/login", (req, res, next) =>{
     res.render('tela_login');
 });
 
+app.post('/login', function(req, res, next){
+    let username = req.body.username,
+        password = req.body.password;
+    db.collection('user').findOne({username: username, password : password}, (err, result) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send();
+        }else if(!result) {
+            res.status(403);
+            res.write('<h1> Erro 403</h1>');
+        }else{
+            res.cookie('username', result.username);
+            res.redirect('/tela_busca');
+            return ;
+        }
+
+    });
+});
+
+app.get("/logout", (req, res, next) => {
+    res.clearCookie('username');
+    res.redirect('/login');
+});
+
+//=========================== FIM Funcoes de Login de Usuario =====================================
 
 app.use('/public', express.static('public'))
 //app.use(bodyParser.urlencoded({ extended: true}))
@@ -132,14 +165,20 @@ app.post('/files', upload.single('uploadfile'), function(req, res, next)
     }
 });
 
-app.get('/tela_busca', (req, res) =>
+app.get('/tela_busca', (req, res, next) =>
 {
-    console.log("-------------------------------");
-    db.collection('upload').find({user: 1}).toArray((err, results) =>
-    {
-        console.log(results);
-        res.render('tela_busca.ejs', {data: results});//
-    });
+    if(req.cookies && req.cookies.username){
+        console.log("-------------------------------");
+        db.collection('upload').find({ user: 1 }).toArray((err, results) => {
+            console.log(results);
+            res.render('tela_busca.ejs', { data: results, username: req.cookies.username });//
+        });
+
+        return ;
+    }else{
+        res.redirect('/login');
+    }
+    
     console.log("-------------------------------");
     //let teste = db.collection('upload').find({user : upusername});
     //arrumar o busca pra aparecer todos os files
