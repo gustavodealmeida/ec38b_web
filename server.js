@@ -20,7 +20,7 @@ let Mongoclient = require('mongodb').MongoClient;
 let config = require('./configMongoDB');
 Mongoclient.connect(config.uri, config.options, (err, client) => {
     if (err) return console.log(err);
-    db = client.db('mydb');
+    db = client.db(config.db);
 });
 
 //Utilziar metodo ObjectID do Mongo
