@@ -26,10 +26,9 @@ Mongoclient.connect(config.uri, config.options, (err, client) => {
 //Utilziar metodo ObjectID do Mongo
 //let ObjectId = require('mongodb').ObjectID;
 
-//Inicizaliado o servidor na porta 3000
-http.createServer(app).listen(3000, () => {
-    console.log('Servidor na porta 3000...')
-});
+//Inicizaliado o servidor
+let porta = process.env.PORT || 3000; //Configurando a porta para upar para o Heroku
+http.createServer(app).listen(porta);
 
 //carregando o css e imagens no servidor
 app.use('/style', express.static(__dirname + '/style'));
