@@ -6,7 +6,8 @@ let express = require('express'),
     http = require('http'),
     cookieParser = require('cookie-parser');
     multer  = require('multer');
-    var upname, upusername = 1;
+    var upname;
+    //, upusername = 1;
 
     //O upuser vai salvar o usuário cadastrado, para poder acessar
     //os arquivos referentes a ele..
@@ -23,7 +24,7 @@ Mongoclient.connect(config.uri, config.options, (err, client) => {
 });
 
 //Utilziar metodo ObjectID do Mongo
-let ObjectId = require('mongodb').ObjectID;
+//let ObjectId = require('mongodb').ObjectID;
 
 //Inicizaliado o servidor na porta 3000
 http.createServer(app).listen(3000, () => {
@@ -74,7 +75,7 @@ app.post('/get_usuario', (req, res) => {
         if(mensagem==="Tudo Ok"){
             db.collection('user').insertOne(user_info, (err, result) => {
                 if (err){
-                    res.redirect('/cadastro_usuario', { data: user_info, mensagem: "Username ou Email já cadastrado"});
+                    res.render('cadastro_usuario.ejs', { data: user_info, mensagem: "Username ou Email já cadastrado"});
                     return console.log(err);
                 }else{
                     console.log(result);
@@ -89,6 +90,7 @@ app.post('/get_usuario', (req, res) => {
 
 //Se cadastro for efetuado com sucesso, é redirecionado para essa página
 app.get('/cadastro_sucesso', (req, res)=>{
+        //db.collection('user').drop();
         res.render('cadastro_sucesso.ejs');
 })
 
@@ -150,7 +152,7 @@ app.post('/files', upload.single('uploadfile'), function(req, res, next)
     else
     {
         let upload = new require('./upload'),
-            upload_info = new upload(upname, upusername);
+            upload_info = new upload(upname, req.cookies.username);
 
         db.collection('upload').insertOne(upload_info, (err, result) => 
         {
@@ -169,9 +171,9 @@ app.get('/tela_busca', (req, res, next) =>
 {
     if(req.cookies && req.cookies.username){
         console.log("-------------------------------");
-        db.collection('upload').find({ user: 1 }).toArray((err, results) => {
+        db.collection('upload').find({ username: req.cookies.username }).toArray((err, results) => {
             console.log(results);
-            res.render('tela_busca.ejs', { data: results, username: req.cookies.username });//
+            res.render('tela_busca.ejs', { data: results, username: req.cookies.username});
         });
 
         return ;
@@ -187,7 +189,14 @@ app.get('/tela_busca', (req, res, next) =>
 
 app.get('/tela_publicacao', (req, res) =>
 {
-    res.render('tela_publicacao.ejs');
+    if (req.cookies && req.cookies.username) {
+        res.render('tela_publicacao.ejs', { username: req.cookies.username });
+
+        return;
+    } else {
+        res.redirect('/login');
+    }
+    
 });
 
 app.post('/busca', (req, res) =>
@@ -200,7 +209,7 @@ app.post('/busca', (req, res) =>
     {
         db.collection('upload').find({name: data.busca}).toArray((err, results) =>
         {
-            if(!err) res.render('tela_busca.ejs', {data: results});//
+            if(!err) res.render('tela_busca.ejs', {data: results, username: req.cookies.username});//
 
             else console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&");
         });

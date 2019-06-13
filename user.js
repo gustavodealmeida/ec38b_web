@@ -6,9 +6,8 @@ Mongoclient.connect(config.uri, config.options, (err, client) => {
     db = client.db('mydb');
 
     //Garantindo unicidade dos indices username e email
-    db.collection('user').createIndex(
-        { username: 1, email: 1 },
-        { unique: true });
+    db.collection('user').createIndex({ username: 1 }, { unique: true });
+    db.collection('user').createIndex({email: 1 },{ unique: true});
 });
 
 
@@ -58,5 +57,4 @@ module.exports  = class User{
         
         return "Tudo Ok";
     }
-
 }

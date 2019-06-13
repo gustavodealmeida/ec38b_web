@@ -9,12 +9,11 @@ Mongoclient.connect(config.uri, config.options, (err, client) => {
     db.collection('upload').createIndex();
 });
 
-
 module.exports  = class upload{
-    constructor (name, user){
+    constructor (name, username){
         //nome == caminho
         this.name = name;
         //usuário
-        this.user = user;
+        this.username = username;
     }
 }
