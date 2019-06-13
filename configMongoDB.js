@@ -1,6 +1,6 @@
 module.exports = {
-    uri: 'mongodb://localhost:27017/test',
-    db: 'test',
+    uri: 'mongodb://test:123456a@ds337377.mlab.com:37377/heroku_d3dj255t',
+    db: 'heroku_d3dj255t',
     options: {
         useNewUrlParser: true
     }
