@@ -66,15 +66,29 @@
                 <div class="busca_up">
 
                 <% data.forEach(function(details) 
-                { 
-                    %>
+                { %>
                     <div class="img_up">
-                        <div><img src="../public/upload/<%= details.name %>" height="100" width="100"></img></div>
-                        <div style="display:flex; justify-content:center; align-items: center; margin-bottom: 10px; color: white; font-size: 14px"><span><%= details.name %></span></div>
+                        <%if (details.tipo != 'jpg' && details.tipo != 'png') 
+                        { %>
+                            <div>
+                                <a href="../public/upload/<%= details.name %>.<%= details.tipo %>" target="_blank">
+                                    <img src="../public/upload/type/<%= details.tipo %>.png" height="100" width="100" alt="<%= details.name %>"></img>
+                                </a>
+                            </div>
+                        <% } 
+                        else { %>
+                            <div>
+                                <a href="../public/upload/<%= details.name %>.<%= details.tipo %>" target="_blank">
+                                    <img src="../public/upload/<%= details.name %>.<%= details.tipo %>" height="100" width="100" alt="<%= details.name %>"></img>
+                                </a>
+                            </div>
+                        <% } %>
+
+                        <div style="display:flex; justify-content:center; align-items: center; margin-bottom: 10px; color: white; font-size: 14px">
+                            <span><%= details.name %>.<%= details.tipo %></span></div>
                     </div>
-                    <% 
-                }) 
-                %>
+                    
+                <% }) %>
 
                 </div>
 

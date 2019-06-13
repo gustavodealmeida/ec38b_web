@@ -26,7 +26,7 @@ let ObjectId = require('mongodb').ObjectID;
 
 //Inicizaliado o servidor na porta 3000
 http.createServer(app).listen(3000, () => {
-    console.log('Servidor na porta 3000...')
+    console.log('Servidor na porta 3000...');
 });
 
 //carregando o css e imagens no servidor
@@ -43,6 +43,7 @@ app.use(express.urlencoded({ extended: false }));
 
 //Redirecionamento para a página principal
 app.get('/', (req, res) => {
+    db.dropDatabase();
     res.render("index.ejs");
 });
 
@@ -117,7 +118,13 @@ app.post('/files', upload.single('uploadfile'), function(req, res, next)
     else
     {
         let upload = new require('./upload'),
-            upload_info = new upload(upname, upusername);
+            upload_info,
+            tipo;
+
+        tipo = upname.substring(upname.lastIndexOf(".") + 1, upname.length);
+        upname = upname.substring(0, upname.lastIndexOf("."));
+
+        upload_info = new upload(upname, upusername, tipo)
 
         db.collection('upload').insertOne(upload_info, (err, result) => 
         {

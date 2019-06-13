@@ -11,10 +11,12 @@ Mongoclient.connect(config.uri, config.options, (err, client) => {
 
 
 module.exports  = class upload{
-    constructor (name, user){
+    constructor (name, user, tipo){
         //nome == caminho
         this.name = name;
         //usuário
         this.user = user;
+        //tipo - extensao
+        this.tipo = tipo
     }
 }
