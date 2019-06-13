@@ -3,7 +3,7 @@ let Mongoclient = require('mongodb').MongoClient;
 let config = require('./configMongoDB');
 Mongoclient.connect(config.uri, config.options, (err, client) => {
     if (err) return console.log(err);
-    db = client.db('mydb');
+    db = client.db(config.db);
 
     //Garantindo unicidade dos indices username e email
     db.collection('user').createIndex({ username: 1 }, { unique: true });

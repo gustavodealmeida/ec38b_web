@@ -20,20 +20,28 @@ let Mongoclient = require('mongodb').MongoClient;
 let config = require('./configMongoDB');
 Mongoclient.connect(config.uri, config.options, (err, client) => {
     if (err) return console.log(err);
-    db = client.db('mydb');
+    db = client.db(config.db);
+
+    //Inicizaliado o servidor
+    let porta = process.env.PORT || 3000; //Configurando a porta para upar para o Heroku
+    http.createServer(app).listen(porta, () => {
+        console.log('Servidor na porta ' + porta + '...');
+    });
 });
 
 //Utilziar metodo ObjectID do Mongo
 //let ObjectId = require('mongodb').ObjectID;
 
-//Inicizaliado o servidor na porta 3000
-http.createServer(app).listen(3000, () => {
-    console.log('Servidor na porta 3000...');
-});
+//Inicizaliado o servidor
+/*let porta = process.env.PORT || 3000; //Configurando a porta para upar para o Heroku
+http.createServer(app).listen(porta, () => {
+    console.log('Servidor na porta ' + porta + '...');
+});*/
 
 //carregando o css e imagens no servidor
 app.use('/style', express.static(__dirname + '/style'));
 app.use('/images', express.static(__dirname + '/images'));
+app.use('/public', express.static(__dirname + '/public'));
 
 //setando direotrio que está as views
 app.set('views', path.join(__dirname, '/views'));
@@ -49,8 +57,17 @@ app.use(cookieParser());
 
 //Redirecionamento para a página principal
 app.get('/', (req, res) => {
-    db.dropDatabase();
-    res.render("index.ejs");
+    
+    //db.dropDatabase();
+
+    if (req.cookies && req.cookies.username) {
+        res.redirect('/tela_busca');
+
+        return;
+    } else {
+        res.render("index.ejs");
+    }
+    
 });
 
 //Redirecionamento para a página de cadastro
@@ -129,7 +146,7 @@ app.get("/logout", (req, res, next) => {
 
 //=========================== FIM Funcoes de Login de Usuario =====================================
 
-app.use('/public', express.static('public'))
+
 //app.use(bodyParser.urlencoded({ extended: true}))
 
 var storage = multer.diskStorage({
