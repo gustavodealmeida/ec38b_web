@@ -41,6 +41,7 @@ http.createServer(app).listen(porta, () => {
 //carregando o css e imagens no servidor
 app.use('/style', express.static(__dirname + '/style'));
 app.use('/images', express.static(__dirname + '/images'));
+app.use('/public', express.static(__dirname + '/public'));
 
 //setando direotrio que está as views
 app.set('views', path.join(__dirname, '/views'));
@@ -142,7 +143,7 @@ app.get("/logout", (req, res, next) => {
 
 //=========================== FIM Funcoes de Login de Usuario =====================================
 
-app.use('/public', express.static('public'))
+
 //app.use(bodyParser.urlencoded({ extended: true}))
 
 var storage = multer.diskStorage({
