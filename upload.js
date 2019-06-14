@@ -5,8 +5,8 @@ Mongoclient.connect(config.uri, config.options, (err, client) => {
     if (err) return console.log(err);
     db = client.db(config.db);
 
-    //Garantindo unicidade dos indices username e email
-    db.collection('upload').createIndex();
+    //Garantindo unicidade do indice name
+    db.collection('upload').createIndex({name: 1 },{ unique: true});
 });
 
 module.exports  = class upload{

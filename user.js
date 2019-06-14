@@ -26,33 +26,33 @@ module.exports  = class User{
 
     static verificaCampos(User){
         if(User.username === ""){
-            return "Campo Username Vazio"; 
+            return "Username Empty"; 
         }
         if (User.email === "") {
-            return "Campo Email Vazio";
+            return "Email Empty";
         }
         if (User.password === "") {
-            return "Campo password Vazio";
+            return "Password Empty";
         }
 
         //== Campos de endereco ==
         if (User.endereco === "") {
-            return "Campo ENDEREÇO Vazio";
+            return "Adress Empty";
         }
         if (User.bairro === "") {
-            return "Campo BAIRRO Vazio";
+            return "District Empty";
         }
         if (User.numero === "") {
-            return "Campo NUMERO Vazio";
+            return "Number Empty";
         }
         if (User.cidade === "") {
-            return "Campo CIDADE Vazio";
+            return "City Empty";
         }
         if (User.estado === "") {
-            return "Campo ESTADO Vazio";
+            return "State Empty";
         }
         if (User.cep === "") {
-            return "Campo CEP Vazio";
+            return "CEP Empty";
         }
         
         return "Tudo Ok";

@@ -4,8 +4,9 @@ let express = require('express'),
     path = require('path'),
     router = express.Router();
     http = require('http'),
-    cookieParser = require('cookie-parser');
-    multer  = require('multer');
+    cookieParser = require('cookie-parser'),
+    multer  = require('multer'),
+    aux = 0;
     var upname;
     //, upusername = 1;
 
@@ -93,7 +94,7 @@ app.post('/get_usuario', (req, res) => {
         if(mensagem==="Tudo Ok"){
             db.collection('user').insertOne(user_info, (err, result) => {
                 if (err){
-                    res.render('cadastro_usuario.ejs', { data: user_info, mensagem: "Username ou Email já cadastrado"});
+                    res.render('cadastro_usuario.ejs', { data: user_info, mensagem: "Username or Email already exists"});
                     return console.log(err);
                 }else{
                     console.log(result);
@@ -129,7 +130,7 @@ app.post('/login', function(req, res, next){
             return res.status(500).send();
         }else if(!result) {
             res.status(403);
-            res.write('<h1> Erro 403</h1>');
+            res.write('<h1> Error 403</h1>');
         }else{
             res.cookie('username', result.username);
             res.redirect('/tela_busca');
@@ -165,7 +166,10 @@ app.post('/files', upload.single('uploadfile'), function(req, res, next)
 {
     console.log(req.file);
     if(req.file == null)
+    {
+        aux = 2;
         res.redirect('/tela_publicacao');
+    }
 
     else
     {
@@ -180,7 +184,12 @@ app.post('/files', upload.single('uploadfile'), function(req, res, next)
 
         db.collection('upload').insertOne(upload_info, (err, result) => 
         {
-            if(err) return console.log(err);
+            if(err) 
+            {
+                aux = 1;
+                res.redirect('/tela_publicacao');
+                return console.log(err);
+            }
 
             else
             {
@@ -194,7 +203,7 @@ app.post('/files', upload.single('uploadfile'), function(req, res, next)
 app.get('/tela_busca', (req, res, next) =>
 {
     if(req.cookies && req.cookies.username){
-        console.log("-------------------------------");
+
         db.collection('upload').find({ username: req.cookies.username }).toArray((err, results) => {
             console.log(results);
             res.render('tela_busca.ejs', { data: results, username: req.cookies.username});
@@ -214,7 +223,20 @@ app.get('/tela_busca', (req, res, next) =>
 app.get('/tela_publicacao', (req, res) =>
 {
     if (req.cookies && req.cookies.username) {
-        res.render('tela_publicacao.ejs', { username: req.cookies.username });
+
+        if(aux === 1){
+            aux = 0;
+            res.render('tela_publicacao.ejs', { username: req.cookies.username, message: "Already exists a file with the same name"});
+        }
+
+        else if(aux === 2){
+            aux = 0;
+            res.render('tela_publicacao.ejs', { username: req.cookies.username, message: "No file selected"});
+        }
+
+        else{
+            res.render('tela_publicacao.ejs', { username: req.cookies.username, message: ""});
+        }
 
         return;
     } else {
