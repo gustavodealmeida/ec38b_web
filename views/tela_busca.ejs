@@ -2,7 +2,8 @@
 <html>
     <head>
         <meta http-equiv="content-Language" content="pt-br" charset="UTF-8">
-        <link rel="fluid-icon" herf="https://github.com/fluidicon.png" title="GitHub">
+        <link rel="fluid-icon" herf="/images/fluidicon.png" title="GitHub">
+        <link rel="icon" type="image/x-icon" href="/images/favicon.ico"/>
         <title>The world’s leading software development platform · GitHub</title>
         <meta name="description" content=   "GitHub brings together the world’s largest community of developers to discover,
                                             share, and build better software. From open source projects to private team repositories,
@@ -47,22 +48,45 @@
                 </div>
 
                 <div class="busca_up">
-
+                    <a class="pub" style="font-size: 24px; color: rgb(255, 255, 255);"><%= message %></a>
                 <% data.forEach(function(details) 
                 { %>
                     <div class="img_up">
                         <%if (details.tipo != 'jpg' && details.tipo != 'png') 
                         { %>
-                            <div>
-                                <a href="../public/upload/<%= details.name %>.<%= details.tipo %>" target="_blank">
-                                    <img src="../public/upload/type/<%= details.tipo %>.png" height="100" width="100" alt="<%= details.name %>"></img>
-                                </a>
-                            </div>
+                            <%if (  details.tipo == 'mp4' || details.tipo == 'avi' || details.tipo == 'mpg' || 
+                                    details.tipo == 'wmv' || details.tipo == '3gp' || details.tipo == 'mkv' ||
+                                    details.tipo == 'flv' || details.tipo == 'm4v' || details.tipo == 'mov' ||
+                                    details.tipo == 'mkv') 
+                            { %>
+                                <div>
+                                    <a href="../public/upload/<%= details.name %>.<%= details.tipo %>" target="_blank">
+                                        <img src="../public/upload/type/video.png" height="150" width="150" alt="<%= details.name %>"></img>
+                                    </a>
+                                </div>
+                            <% } 
+                            else if (   details.tipo == 'mp3' || details.tipo == 'm4a' || details.tipo == 'aac' || 
+                                        details.tipo == 'ogg' || details.tipo == 'wma' || details.tipo == 'flac' ||
+                                        details.tipo == 'wav')
+                            { %>
+                                <div>
+                                    <a href="../public/upload/<%= details.name %>.<%= details.tipo %>" target="_blank">
+                                        <img src="../public/upload/type/audio.png" height="150" width="150" alt="<%= details.name %>"></img>
+                                    </a>
+                                </div>
+                            <% } 
+                            else { %>
+                                <div>
+                                    <a href="../public/upload/<%= details.name %>.<%= details.tipo %>" target="_blank">
+                                        <img src="../public/upload/type/<%= details.tipo %>.png" height="150" width="150" alt="<%= details.name %>"></img>
+                                    </a>
+                                </div>
+                            <% } %>
                         <% } 
                         else { %>
                             <div>
                                 <a href="../public/upload/<%= details.name %>.<%= details.tipo %>" target="_blank">
-                                    <img src="../public/upload/<%= details.name %>.<%= details.tipo %>" height="100" width="100" alt="<%= details.name %>"></img>
+                                    <img src="../public/upload/<%= details.name %>.<%= details.tipo %>" height="150" width="150" alt="<%= details.name %>"></img>
                                 </a>
                             </div>
                         <% } %>

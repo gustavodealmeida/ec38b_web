@@ -11,7 +11,7 @@ Mongoclient.connect(config.uri, config.options, (err, client) => {
 
 module.exports  = class upload{
     constructor (name, username, tipo){
-        //nome == caminho
+        //nome
         this.name = name;
         //usuário
         this.username = username;
