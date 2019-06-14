@@ -47,6 +47,8 @@ app.get('/', (req, res) => {
     } else {
         res.render("index.ejs"); //Se não tiver, manda para a página inicial..
     }
+    //db.dropDatabase(); //Para limpar o bd, quando preciso
+    //console.log("Drop");
 });
 
 //=========================== Funções de Cadastro de Usuario =====================================
