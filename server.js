@@ -3,11 +3,11 @@ let express = require('express'),
     path = require('path'),
     http = require('http'),
     cookieParser = require('cookie-parser'),
+    session = require('express-session'),
     multer  = require('multer');
 
 var upname, //Para armazenar o nome do arquivo no upload
-    aux = 0,
-    auxLogin = 0; //Variável para verificar de onde a página publicação está sendo chamada
+    aux = 0;
 
 //Conexão com o MongoDB
 let Mongoclient = require('mongodb').MongoClient;
@@ -37,12 +37,18 @@ app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+//Configurando session
+app.use(session({
+    secret: 'Sessao',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false}
+}));
 
 //Redirecionamento para a página principal
 app.get('/', (req, res) => {
-    if (req.cookies && req.cookies.username) {  //Verifica o cookie, se tiver,
+    if (req.session && req.session.username) {  //Verifica o cookie, se tiver,
         res.redirect('/tela_busca');            //manda direto para a tela de busca..
-
         return;
     } else {
         res.render("index.ejs"); //Se não tiver, manda para a página inicial..
@@ -56,12 +62,21 @@ app.get('/', (req, res) => {
 //Redirecionamento para a página de cadastro
 app.route('/cadastro_usuario')
 .get((req, res) => {
-    let data = req.body;
-    res.render("cadastro_usuario.ejs", { data: "", mensagem: "" });
+    if(req.cookies && req.cookies.data && req.cookies.mensagem){
+        data_aux = req.cookies.data;
+        mensagem_aux = req.cookies.mensagem;
+        res.clearCookie('data');
+        res.clearCookie('mensagem');
+        res.render("cadastro_usuario.ejs", { data: data_aux, mensagem: mensagem_aux });
+        
+    }else{
+        res.render("cadastro_usuario.ejs", { data: "", mensagem: "" });
+    }
+    //let data = req.body;
+    //res.render("cadastro_usuario.ejs", { data: "", mensagem: "" });
 })
 .post((req, res) => {
     let dados_preenchidos = req.body;
-
     res.render("cadastro_usuario.ejs", { data: dados_preenchidos, mensagem: "" });
 });
 
@@ -76,7 +91,10 @@ app.post('/get_usuario', (req, res) => {
         if(mensagem==="Tudo Ok"){
             db.collection('user').insertOne(user_info, (err, result) => {
                 if (err){
-                    res.render('cadastro_usuario.ejs', { data: user_info, mensagem: "Username or Email already exists"});
+                    res.cookie('data', user_info);
+                    res.cookie('mensagem', "Username or Email already exists");
+                    res.redirect('/cadastro_usuario');
+                    //res.render('cadastro_usuario.ejs', { data: user_info, mensagem: "Username or Email already exists"});
                     return console.log(err);
                 }else{
                     console.log(result);
@@ -84,7 +102,10 @@ app.post('/get_usuario', (req, res) => {
                 }      
             });
         }else{
-            res.render('cadastro_usuario.ejs', { data: req.body, mensagem: mensagem});
+            res.cookie('data', req.body);
+            res.cookie('mensagem', mensagem);
+            res.redirect('/cadastro_usuario');
+            //res.render('cadastro_usuario.ejs', { data: req.body, mensagem: mensagem});
         }
 });
 
@@ -97,13 +118,14 @@ app.get('/cadastro_sucesso', (req, res)=>{
 
 //Mostra tela de login
 app.get("/login", (req, res, next) =>{
-    if(auxLogin == 1) 
-    {
-        auxLogin = 0;
+    if (req.cookies && req.cookies.loginfail) {
+        res.clearCookie('loginfail');
         res.render('tela_login', {message: "Incorrect username or password"});
-    }
-    
-    else res.render('tela_login', {message: ""});
+        
+    }else{
+        res.render('tela_login', { message: "" });
+    } 
+        
 });
 
 //Realiza as verficações do login, e conecta (ou não)
@@ -115,10 +137,11 @@ app.post('/login', function(req, res, next){
             console.log(err);
             return res.status(500).send();
         }else if(!result) {
-            auxLogin = 1;
+            res.cookie('loginfail');
             res.redirect('/login');
         }else{
-            res.cookie('username', result.username);
+            req.session.username = result.username;
+            //res.cookie('username', result.username);
             res.redirect('/tela_busca');
             return ;
         }
@@ -127,7 +150,8 @@ app.post('/login', function(req, res, next){
 
 //Fazer logout
 app.get("/logout", (req, res, next) => {
-    res.clearCookie('username');
+    req.session.destroy();
+    //res.clearCookie('username');
     res.redirect('/login');
 });
 
@@ -149,46 +173,46 @@ var upload = multer({ storage: storage })
 //Upload do arquivo
 app.post('/files', upload.single('uploadfile'), function(req, res, next)
 {
-    console.log(req.file);
-    if(req.file == null) //Tentar upar nenhum arquivo
-    {
-        aux = 2;
-        res.redirect('/tela_publicacao'); //Recarrega a tela
-    }
-
-    else
-    {
-        let upload = new require('./upload'),
-            upload_info,
-            tipo;
-
-        tipo = upname.substring(upname.lastIndexOf(".") + 1, upname.length); //Pega só a extensão
-        upname = upname.substring(0, upname.lastIndexOf(".")); //Pega só o nome
-
-        upload_info = new upload(upname, req.cookies.username, tipo)
-
-        db.collection('upload').insertOne(upload_info, (err, result) => //Joga no banco
+    if (req.session && req.session.username) {
+        console.log(req.file);
+        if (req.file == null) //Tentar upar nenhum arquivo
         {
-            if(err) 
-            {
-                aux = 1; //Gera o erro de já ter um arquivo com o mesmo nome
-                res.redirect('/tela_publicacao'); //Recarrega a página
-                return console.log(err);
-            }
+            aux = 2;
+            res.redirect('/tela_publicacao'); //Recarrega a tela
+        }
 
-            else
+        else {
+            let upload = new require('./upload'),
+                upload_info,
+                tipo;
+
+            tipo = upname.substring(upname.lastIndexOf(".") + 1, upname.length); //Pega só a extensão
+            upname = upname.substring(0, upname.lastIndexOf(".")); //Pega só o nome
+
+            upload_info = new upload(upname, req.cookies.username, tipo)
+
+            db.collection('upload').insertOne(upload_info, (err, result) => //Joga no banco
             {
-                console.log(result);
-                res.redirect('/tela_busca');//Quando dá certo, volta pra tela de busca
-            }
-        });
+                if (err) {
+                    aux = 1; //Gera o erro de já ter um arquivo com o mesmo nome
+                    res.redirect('/tela_publicacao'); //Recarrega a página
+                    return console.log(err);
+                }
+
+                else {
+                    console.log(result);
+                    res.redirect('/tela_busca');//Quando dá certo, volta pra tela de busca
+                }
+            });
+        }
     }
+    
 });
 
 //Tela de publicação
 app.get('/tela_publicacao', (req, res) =>
 {
-    if (req.cookies && req.cookies.username) {
+    if (req.session && req.session.username) {
 
         if(aux === 1){ //Se já existe algum arquivo com o mesmo nome no banco, manda um aviso ao recarregar a página
             aux = 0;
@@ -215,7 +239,7 @@ app.get('/tela_publicacao', (req, res) =>
 //Tela de busca
 app.get('/tela_busca', (req, res, next) =>
 {
-    if(req.cookies && req.cookies.username){ //se tem um cookie, carrrega os arquivos referentes ao username
+    if (req.session && req.session.username){ //se tem um cookie, carrrega os arquivos referentes ao username
 
         db.collection('upload').find({ username: req.cookies.username }).toArray((err, results) => {
             console.log(results);
@@ -231,24 +255,25 @@ app.get('/tela_busca', (req, res, next) =>
 //Função de busca
 app.post('/busca', (req, res) =>
 {
-    let data = req.body;
+    if (req.session && req.session.username) {
+        let data = req.body;
 
-    if(data.busca != "")
-    {
-        db.collection('upload').find({name: data.busca}).toArray((err, results) =>
-        {
-            let messageBusca;
+        if (data.busca != "") {
+            db.collection('upload').find({ name: data.busca }).toArray((err, results) => {
+                let messageBusca;
 
-            if(results == "") messageBusca = "No results";
+                if (results == "") messageBusca = "No results";
 
-            else messageBusca = "";
+                else messageBusca = "";
 
-            if(!err) res.render('tela_busca.ejs', {data: results, username: req.cookies.username, message: messageBusca});//
+                if (!err) res.render('tela_busca.ejs', { data: results, username: req.cookies.username, message: messageBusca });
 
-            else console.log("ERRO");
-        });
+                else console.log("ERRO");
+            });
+        }
+
+        else res.redirect('/tela_busca');
     }
-
-    else res.redirect('/tela_busca');
+    
 });
 
