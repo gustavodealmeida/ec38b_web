@@ -141,6 +141,7 @@ app.post('/login', function(req, res, next){
             res.redirect('/login');
         }else{
             req.session.username = result.username;
+            req.session.aux = 0;
             //res.cookie('username', result.username);
             res.redirect('/tela_busca');
             return ;
@@ -163,7 +164,7 @@ var storage = multer.diskStorage({
       cb(null, 'public/upload') //Pasta que ficarão os uploads
     },
     filename: function (req, file, cb) {
-        upname = file.originalname; //Nome do arquivo, upname salva o nome para ser usado daqui a pouco
+        req.session.upname = file.originalname; //Nome do arquivo, upname salva o nome para ser usado daqui a pouco
         cb(null, file.originalname)
     }
   })
@@ -177,24 +178,25 @@ app.post('/files', upload.single('uploadfile'), function(req, res, next)
         console.log(req.file);
         if (req.file == null) //Tentar upar nenhum arquivo
         {
-            aux = 2;
+            req.session.aux = 2;
             res.redirect('/tela_publicacao'); //Recarrega a tela
         }
 
         else {
             let upload = new require('./upload'),
                 upload_info,
-                tipo;
+                tipo,
+                upname = req.session.upname;
 
             tipo = upname.substring(upname.lastIndexOf(".") + 1, upname.length); //Pega só a extensão
             upname = upname.substring(0, upname.lastIndexOf(".")); //Pega só o nome
 
-            upload_info = new upload(upname, req.cookies.username, tipo)
+            upload_info = new upload(upname, req.session.username, tipo)
 
             db.collection('upload').insertOne(upload_info, (err, result) => //Joga no banco
             {
                 if (err) {
-                    aux = 1; //Gera o erro de já ter um arquivo com o mesmo nome
+                    req.session.aux = 1; //Gera o erro de já ter um arquivo com o mesmo nome
                     res.redirect('/tela_publicacao'); //Recarrega a página
                     return console.log(err);
                 }
@@ -214,18 +216,18 @@ app.get('/tela_publicacao', (req, res) =>
 {
     if (req.session && req.session.username) {
 
-        if(aux === 1){ //Se já existe algum arquivo com o mesmo nome no banco, manda um aviso ao recarregar a página
-            aux = 0;
-            res.render('tela_publicacao.ejs', { username: req.cookies.username, message: "Already exists a file with the same name"});
+        if (req.session.aux === 1){ //Se já existe algum arquivo com o mesmo nome no banco, manda um aviso ao recarregar a página
+            req.session.aux = 0;
+            res.render('tela_publicacao.ejs', { username: req.session.username, message: "Already exists a file with the same name"});
         }
 
-        else if(aux === 2){ //Se nenhum arquivo foi selecionado, manda um aviso ao recarregar a página
-            aux = 0; 
-            res.render('tela_publicacao.ejs', { username: req.cookies.username, message: "No file selected"});
+        else if (req.session.aux === 2){ //Se nenhum arquivo foi selecionado, manda um aviso ao recarregar a página
+            req.session.aux = 0; 
+            res.render('tela_publicacao.ejs', { username: req.session.username, message: "No file selected"});
         }
 
         else{ //Quando é chamada pela tela de busca, não mostra nenhuma mensagem
-            res.render('tela_publicacao.ejs', { username: req.cookies.username, message: ""});
+            res.render('tela_publicacao.ejs', { username: req.session.username, message: ""});
         }
 
         return;
@@ -241,9 +243,9 @@ app.get('/tela_busca', (req, res, next) =>
 {
     if (req.session && req.session.username){ //se tem um cookie, carrrega os arquivos referentes ao username
 
-        db.collection('upload').find({ username: req.cookies.username }).toArray((err, results) => {
+        db.collection('upload').find({ username: req.session.username }).toArray((err, results) => {
             console.log(results);
-            res.render('tela_busca.ejs', { data: results, username: req.cookies.username, message: ""});
+            res.render('tela_busca.ejs', { data: results, username: req.session.username, message: ""});
         });
 
         return ;
@@ -266,7 +268,7 @@ app.post('/busca', (req, res) =>
 
                 else messageBusca = "";
 
-                if (!err) res.render('tela_busca.ejs', { data: results, username: req.cookies.username, message: messageBusca });
+                if (!err) res.render('tela_busca.ejs', { data: results, username: req.session.username, message: messageBusca });
 
                 else console.log("ERRO");
             });
