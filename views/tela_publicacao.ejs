@@ -39,8 +39,14 @@
                         <form action="/files" method="post" enctype="multipart/form-data">
                             <a class="pub">Publish Page</a><br><br>
                             <div style="float: right; padding-left: 50px;"><input type="file" name="uploadfile"></div>
+
+                            <div style="margin-top: 40px; margin-left: 75px;">
+                                <input type="radio" name="privacidade" value="Private"> Private
+                                <input type="radio" name="privacidade" value="Public" style="margin-left: 20px;"> Public
+                            </div>
+
                             <div>
-                                <button class="back_send" type="submit" style="margin-top: 35px">Send</button>  
+                                <button class="back_send" type="submit" style="margin-top: 20px">Send</button>  
                             </div>
                         </form>
 

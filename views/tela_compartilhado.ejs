@@ -19,7 +19,7 @@
                     <li class="li_01 "><a class="a_aa" href="/"><img src="../images/logo.jpg"></img></a></li>
                     <li class="li_02 up"><a class="a_a1up" href="logout">Logout</a></li>
                     <li class="li_02 some"><a class="a_a1" style="padding-left: 12px; padding-right: 24px;"
-                    href="/tela_busca"><%= username %></a></li>
+                    href="/tela_compartilhado"><%= username %></a></li>
                     
 
                 <!--    <li class="li_02 some" style="height: 41px"><a class="a_a1" style="padding: 0px;"><span
@@ -36,20 +36,10 @@
             <div class="teste2">
                 <div class="topo_busca">
                     <div class="search_busca">
-                        <form action="/busca" method="post">
+                        <form action="/busca_compartilhado" method="post">
                             <input type="text" class="search_busca" name="busca" placeholder="Search Files"/>
                             <img src="../images/barra.svg" class="search" alt="Buscar"/>
                         </form> 
-                    </div>
-                    
-                    <div>
-                        <form action="/tela_publicacao"><button class="Add" type="submit">Add File</button></form> 
-                    </div>
-
-                    <div>
-                        <form action="/tela_compartilhado"><button class="Add" type="submit" 
-                        style=" background: rgb(184, 187, 4); border: 1px solid rgb(184, 187, 4); margin-left: 15px;">
-                        Shared</button></form> 
                     </div>
                 </div>
 
@@ -107,7 +97,7 @@
                         <% } %>
 
                         <div style="display:flex; justify-content:center; align-items: center; margin-bottom: 10px; color: white; font-size: 14px">
-                            <span><%= details.name %>.<%= details.tipo %><br><%= details.privacidade %></span>
+                            <span><%= details.name %>.<%= details.tipo %><br>User: <%= details.username %></span>
 
                         </div>
                     </div>
@@ -124,6 +114,14 @@
                 -->
             </div>
         </div>
+
+    <script type="text/javascript" charset="utf-8">
+        setInterval(function(){
+            var xmlhttp = new XMLHttpRequest();
+        }, 5000);
+        
+
+    </script>
         
     </body>
 </html>

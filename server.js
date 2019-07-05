@@ -47,14 +47,14 @@ app.use(session({
 
 //Redirecionamento para a página principal
 app.get('/', (req, res) => {
+    //db.dropDatabase(); //Para limpar o bd, quando preciso
+    //console.log("Drop");
     if (req.session && req.session.username) {  //Verifica o cookie, se tiver,
         res.redirect('/tela_busca');            //manda direto para a tela de busca..
         return;
     } else {
         res.render("index.ejs"); //Se não tiver, manda para a página inicial..
     }
-    //db.dropDatabase(); //Para limpar o bd, quando preciso
-    //console.log("Drop");
 });
 
 //=========================== Funções de Cadastro de Usuario =====================================
@@ -186,12 +186,15 @@ app.post('/files', upload.single('uploadfile'), function(req, res, next)
             let upload = new require('./upload'),
                 upload_info,
                 tipo,
-                upname = req.session.upname;
+                upname = req.session.upname,
+                privacidade = req.body.privacidade;
+
+            if(!privacidade) privacidade = "Private";
 
             tipo = upname.substring(upname.lastIndexOf(".") + 1, upname.length); //Pega só a extensão
             upname = upname.substring(0, upname.lastIndexOf(".")); //Pega só o nome
 
-            upload_info = new upload(upname, req.session.username, tipo)
+            upload_info = new upload(upname, req.session.username, tipo, privacidade)
 
             db.collection('upload').insertOne(upload_info, (err, result) => //Joga no banco
             {
@@ -232,7 +235,8 @@ app.get('/tela_publicacao', (req, res) =>
 
         return;
     } else {
-        res.redirect('/login');
+        //res.render('tela_publicacao.ejs', { username: "lusca", message: ""});
+        res.redirect('/tela_login');
     }  
 });
 
@@ -279,3 +283,44 @@ app.post('/busca', (req, res) =>
     
 });
 
+app.get('/tela_compartilhado', (req, res) =>
+{
+    if (req.session && req.session.username) 
+    {
+
+        db.collection('upload').find({ privacidade: "Public" }).toArray((err, results) => {
+            console.log(results);
+            res.render('tela_compartilhado.ejs', { data: results, username: req.session.username, message: ""});
+        });
+
+        return ;
+        
+    }
+
+    else res.redirect('/tela_login'); 
+
+});
+
+app.post('/busca_compartilhado', (req, res) =>
+{
+    if (req.session && req.session.username) {
+        let data = req.body;
+
+        if (data.busca != "") {
+            db.collection('upload').find({ privacidade: "Public" }).toArray((err, results) => {
+                let messageBusca;
+
+                if (results == "") messageBusca = "No results";
+
+                else messageBusca = "";
+
+                if (!err) res.render('tela_compartilhado.ejs', { data: results, username: req.session.username, message: messageBusca });
+
+                else console.log("ERRO");
+            });
+        }
+
+        else res.redirect('/tela_compartilhado');
+    }
+    
+});
