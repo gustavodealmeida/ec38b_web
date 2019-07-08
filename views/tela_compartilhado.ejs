@@ -35,7 +35,7 @@
             <!--Colocando uma div a mais para teste-->
             <div class="teste2">
                 <div class="topo_busca">
-                    <div class="search_busca">
+                    <div class="search_busca" id='test'>
                         <form action="/busca_compartilhado" method="post">
                             <input type="text" class="search_busca" name="busca" placeholder="Search Files"/>
                             <img src="../images/barra.svg" class="search" alt="Buscar"/>
@@ -45,6 +45,10 @@
 
                 <div class="busca_up">
                     <a class="pub" style="font-size: 24px; color: rgb(255, 255, 255);"><%= message %></a>
+
+                    <span id="refresh">
+
+                    </span>
                 <% data.forEach(function(details) 
                 { %>
                     <div class="img_up">
@@ -116,11 +120,17 @@
         </div>
 
     <script type="text/javascript" charset="utf-8">
+        var refresh = document.querySelector('#refresh');
         setInterval(function(){
             var xmlhttp = new XMLHttpRequest();
+            xmlhttp.open("GET", "shared_refresh", true);
+            xmlhttp.onreadystatechange = function(){
+                if(this.readyState == 4 && this.status == 200){
+                    document.getElementById("refresh").innerHTML = xmlhttp.responseText + document.getElementById("refresh").innerHTML;                    
+                }
+            };
+            xmlhttp.send();
         }, 5000);
-        
-
     </script>
         
     </body>

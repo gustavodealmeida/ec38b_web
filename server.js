@@ -187,14 +187,15 @@ app.post('/files', upload.single('uploadfile'), function(req, res, next)
                 upload_info,
                 tipo,
                 upname = req.session.upname,
-                privacidade = req.body.privacidade;
+                privacidade = req.body.privacidade,
+                date = new Date();
 
             if(!privacidade) privacidade = "Private";
 
             tipo = upname.substring(upname.lastIndexOf(".") + 1, upname.length); //Pega só a extensão
             upname = upname.substring(0, upname.lastIndexOf(".")); //Pega só o nome
 
-            upload_info = new upload(upname, req.session.username, tipo, privacidade)
+            upload_info = new upload(upname, req.session.username, tipo, privacidade, date)
 
             db.collection('upload').insertOne(upload_info, (err, result) => //Joga no banco
             {
@@ -290,6 +291,7 @@ app.get('/tela_compartilhado', (req, res) =>
 
         db.collection('upload').find({ privacidade: "Public" }).toArray((err, results) => {
             console.log(results);
+            res.cookie('date', new Date());
             res.render('tela_compartilhado.ejs', { data: results, username: req.session.username, message: ""});
         });
 
@@ -307,7 +309,7 @@ app.post('/busca_compartilhado', (req, res) =>
         let data = req.body;
 
         if (data.busca != "") {
-            db.collection('upload').find({ privacidade: "Public" }).toArray((err, results) => {
+            db.collection('upload').find({ privacidade: "Public", name: data.busca }).toArray((err, results) => {
                 let messageBusca;
 
                 if (results == "") messageBusca = "No results";
@@ -323,4 +325,38 @@ app.post('/busca_compartilhado', (req, res) =>
         else res.redirect('/tela_compartilhado');
     }
     
+});
+
+app.get('/shared_refresh', (req, res) => {
+
+    let auxdate = req.cookies.date;
+    let str = "";
+
+    db.collection('upload').find({ date:{ $gte: new Date(auxdate) }, privacidade: "Public" }).toArray((err, results) => {
+        console.log("auxdate: " + auxdate);
+
+        results.forEach(function(value, index){
+            console.log(value);
+            
+            if(value.tipo != "jpg" && value.tipo != "png")
+            {
+                str += "<div class=\"img_up\">" + "<div><a href=\"../public/upload/" + value.name + "." + value.tipo + "\" target=\"_blank\"><img src=\"../public/upload/type/file.png\" height=\"125\" width=\"125\" alt=\"" + value.name + "\"></img></a></div>";
+            }
+            
+            else
+            {
+                str += "<div class=\"img_up\">" + "<div><a href=\"../public/upload/" + value.name + "." + value.tipo + "\" target=\"_blank\"><img src=\"../public/upload/" + value.name + "." + value.tipo + "\" height=\"125\" width=\"125\" alt=\"" + value.name + "\"></img></a></div>";
+            }
+
+            str += "<div style=\"display:flex; justify-content:center; align-items: center; margin-bottom: 10px; color: white; font-size: 14px\"><span>" + value.name + "." + value.tipo + "<br>User: " + value.username + "</span></div></div>";
+        });
+
+        console.log(str);
+
+        res.clearCookie('date');
+        res.cookie('date', new Date());
+
+        res.end(str);
+        
+    });
 });

@@ -12,7 +12,7 @@ Mongoclient.connect(config.uri, config.options, (err, client) => {
 });
 
 module.exports  = class upload{
-    constructor (name, username, tipo, privacidade){
+    constructor (name, username, tipo, privacidade, date){
         //nome
         this.name = name;
         //usuário
@@ -21,6 +21,8 @@ module.exports  = class upload{
         this.tipo = tipo
         //publico ou privado
         this.privacidade = privacidade;
+        //data da criação
+        this.date = date;
 
     }
 }
