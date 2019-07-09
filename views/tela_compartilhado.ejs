@@ -138,7 +138,7 @@
                         document.getElementById("carregando").innerHTML = "";
                         document.getElementById("refresh").innerHTML = xmlhttp.responseText + document.getElementById("refresh").innerHTML;
                     }else{
-                        document.getElementById("carregando").innerHTML = "<img src='../images/carregando.gif' alt='Carregando...' />" //Progress indicator
+                        document.getElementById("carregando").innerHTML = "<img src='../images/carregando.gif' alt='loading...' />" //Progress indicator
                     }
                 };
                 xmlhttp.send();
@@ -162,7 +162,7 @@
                             resultado.innerHTML = xmlhttp.responseText;
                             resultado.style.padding = '5px';
                         }else{
-                            document.getElementById("resultado").innerHTML = "<span style='color: white'>Carregando...</span>"; //Progress indicator
+                            document.getElementById("resultado").innerHTML = "<span style='color: white'>loading...</span>"; //Progress indicator
                         }
                     }
 
