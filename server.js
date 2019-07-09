@@ -236,7 +236,6 @@ app.get('/tela_publicacao', (req, res) =>
 
         return;
     } else {
-        //res.render('tela_publicacao.ejs', { username: "lusca", message: ""});
         res.redirect('/login');
     }  
 });
