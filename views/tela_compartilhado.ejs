@@ -162,7 +162,7 @@
                             resultado.innerHTML = xmlhttp.responseText;
                             resultado.style.padding = '5px';
                         }else{
-                            document.getElementById("resultado").innerHTML += "<span style='color: white'>Carregando</span>"; //Progress indicator
+                            document.getElementById("resultado").innerHTML = "<span style='color: white'>Carregando...</span>"; //Progress indicator
                         }
                     }
 
@@ -178,14 +178,6 @@
 
                 }
 
-                function sleep(milliseconds) {
-                        var start = new Date().getTime();
-                        for (var i = 0; i < 1e7; i++) {
-                            if ((new Date().getTime() - start) > milliseconds) {
-                                break;
-                            }
-                        }
-                }
         </script>
 
     </body>

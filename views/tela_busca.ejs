@@ -37,8 +37,9 @@
                 <div class="topo_busca">
                     <div class="search_busca">
                         <form action="/busca" method="post">
-                            <input type="text" class="search_busca" name="busca" placeholder="Search Files"/>
+                            <input type="text" class="search_busca" name="busca" id="livesearch" autocomplete="off" placeholder="Search Files"/>
                             <img src="../images/barra.svg" class="search" alt="Buscar"/>
+                            <div id="resultado" style="overflow: hidden;"></div> <!-- Mostrar lista de sugeridos -->
                         </form> 
                     </div>
                     
@@ -115,15 +116,45 @@
                 <% }) %>
 
                 </div>
-
-                <!--
-                <form action="/pub" method="post" enctype="multipart/form-data">
-                    <input type="file" name="filetoupload"><br>
-                    <input type="submit">
-                  </form>
-                -->
             </div>
         </div>
         
+        <script type="text/javascript" charset="utf-8">
+            //Função de Live-Search
+            document.getElementsByTagName("input")[0]
+                .addEventListener("keyup", function () {
+                    let busca = document.getElementById("livesearch").value;
+                    let resultado = document.getElementById("resultado");
+                    let xmlhttp = new XMLHttpRequest();
+
+                    if (busca == "") {
+                        resultado.innerHTML = "";
+                        resultado.style.padding = "0px";
+                        return;
+                    }
+
+                    xmlhttp.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            resultado.innerHTML = xmlhttp.responseText;
+                            resultado.style.padding = '5px';
+                        } else {
+                            document.getElementById("resultado").innerHTML = "<span style='color: white'>Carregando...</span>"; //Progress indicator
+                        }
+                    }
+
+                    xmlhttp.open("POST", "livesearch_private", true);
+                    xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                    xmlhttp.send("busca_parametro=" + busca);
+                });
+
+            function setValue(str) {
+                document.getElementById("livesearch").value = str;
+                document.getElementById("resultado").innerHTML = "";
+                document.getElementById("resultado").style.padding = "0px";
+
+            }
+
+        </script>
+
     </body>
 </html>

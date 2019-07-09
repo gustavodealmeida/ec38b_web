@@ -367,16 +367,37 @@ app.post('/livesearch', (req, res) => {
     let busca = req.body.busca_parametro;
     let string = "";
 
-    db.collection('upload').find({ name: {$regex: busca, $options: 'i'}, privacidade: "Public" }).toArray((err, results) => {
+    db.collection('upload').find({ name: { $regex: busca, $options: 'i' }, privacidade: "Public" }).toArray((err, results) => {
         if (results != null) {
             results.forEach((result, index) => {
                 console.log(result.name);
-                string += "<div onclick= \"setValue('" + result.name +"')\"><span style='color: white' >" + result.name + "</span></div>";
+                string += "<div onclick= \"setValue('" + result.name + "')\"><span style='color: white' >" + result.name + "</span></div>";
             });
         }
 
         console.log(string);
         res.end(string);
-    
+
     });
+});
+
+// Live-search para private
+app.post('/livesearch_private', (req, res) => {
+    if (req.session && req.session.username) {
+        let busca = req.body.busca_parametro;
+        let string = "";
+
+        db.collection('upload').find({username: req.session.username , name: { $regex: busca, $options: 'i' }}).toArray((err, results) => {
+            if (results != null) {
+                results.forEach((result, index) => {
+                    console.log(result.name);
+                    string += "<div onclick= \"setValue('" + result.name + "')\"><span style='color: white' >" + result.name + "</span></div>";
+                });
+            }
+
+            console.log(string);
+            res.end(string);
+
+        });
+    }
 });
