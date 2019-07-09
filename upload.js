@@ -6,9 +6,9 @@ Mongoclient.connect(config.uri, config.options, (err, client) => {
     db = client.db(config.db);
 
     //Garantindo unicidade da relação name e username
-    db.collection('upload').createIndex(
-        { name: 1, username: 1 },
-        { unique: true });
+    //db.collection('upload').createIndex(
+    //    { name: 1, username: 1 },
+    //    { unique: true });
 });
 
 module.exports  = class upload{
