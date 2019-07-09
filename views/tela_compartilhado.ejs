@@ -50,7 +50,11 @@
 
                 <div class="busca_up">
                     <a class="pub" style="font-size: 24px; color: rgb(255, 255, 255);"><%= message %></a>
+                    
+                    <div id="carregando">
 
+                    </div>
+                    
                     <span id="refresh">
 
                     </span>
@@ -121,12 +125,6 @@
 
                 </div>
 
-                <!--
-                <form action="/pub" method="post" enctype="multipart/form-data">
-                    <input type="file" name="filetoupload"><br>
-                    <input type="submit">
-                  </form>
-                -->
             </div>
         </div>
 
@@ -137,7 +135,10 @@
                 xmlhttp.open("GET", "shared_refresh", true);
                 xmlhttp.onreadystatechange = function () {
                     if (this.readyState == 4 && this.status == 200) {
+                        document.getElementById("carregando").innerHTML = "";
                         document.getElementById("refresh").innerHTML = xmlhttp.responseText + document.getElementById("refresh").innerHTML;
+                    }else{
+                        document.getElementById("carregando").innerHTML = "<img src='../images/carregando.gif' alt='Carregando...' />" //Progress indicator
                     }
                 };
                 xmlhttp.send();
@@ -146,9 +147,9 @@
             //Função de Live-Search
             document.getElementsByTagName("input")[0]
                 .addEventListener("keyup", function () {
-                    var busca = document.getElementById("livesearch").value;
-                    var resultado = document.getElementById("resultado");
-                    var xmlhttp = new XMLHttpRequest();
+                    let busca = document.getElementById("livesearch").value;
+                    let resultado = document.getElementById("resultado");
+                    let xmlhttp = new XMLHttpRequest();
 
                     if (busca == "") {
                         resultado.innerHTML = "";
@@ -160,6 +161,8 @@
                         if (this.readyState == 4 && this.status == 200) {
                             resultado.innerHTML = xmlhttp.responseText;
                             resultado.style.padding = '5px';
+                        }else{
+                            document.getElementById("resultado").innerHTML += "<span style='color: white'>Carregando</span>"; //Progress indicator
                         }
                     }
 
@@ -172,6 +175,16 @@
                     document.getElementById("livesearch").value = str;
                     document.getElementById("resultado").innerHTML = "";
                     document.getElementById("resultado").style.padding = "0px";
+
+                }
+
+                function sleep(milliseconds) {
+                        var start = new Date().getTime();
+                        for (var i = 0; i < 1e7; i++) {
+                            if ((new Date().getTime() - start) > milliseconds) {
+                                break;
+                            }
+                        }
                 }
         </script>
 

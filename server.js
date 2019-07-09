@@ -209,7 +209,7 @@ app.post('/files', upload.single('uploadfile'), function(req, res, next)
                     console.log(result);
                     res.redirect('/tela_busca');//Quando dá certo, volta pra tela de busca
                 }
-            });
+            }); 
         }
     }
     
@@ -237,7 +237,7 @@ app.get('/tela_publicacao', (req, res) =>
         return;
     } else {
         //res.render('tela_publicacao.ejs', { username: "lusca", message: ""});
-        res.redirect('/tela_login');
+        res.redirect('/login');
     }  
 });
 
@@ -362,15 +362,16 @@ app.get('/shared_refresh', (req, res) => {
     });
 });
 
+//================ Funcao de Live Search ================================
 app.post('/livesearch', (req, res) => {
     let busca = req.body.busca_parametro;
     let string = "";
 
-    db.collection('upload').find({ name: { $regex: busca }, privacidade: "Public" }).toArray((err, results) => {
+    db.collection('upload').find({ name: {$regex: busca, $options: 'i'}, privacidade: "Public" }).toArray((err, results) => {
         if (results != null) {
             results.forEach((result, index) => {
                 console.log(result.name);
-                string += "<span style='color: white' onclick= \"setValue('"+ result.name +"')\">" + result.name + "</span><br/>";
+                string += "<div onclick= \"setValue('" + result.name +"')\"><span style='color: white' >" + result.name + "</span></div>";
             });
         }
 
