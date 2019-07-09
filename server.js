@@ -299,7 +299,7 @@ app.get('/tela_compartilhado', (req, res) =>
         
     }
 
-    else res.redirect('/tela_login'); 
+    else res.redirect('/login'); 
 
 });
 
@@ -327,16 +327,17 @@ app.post('/busca_compartilhado', (req, res) =>
     
 });
 
+//====================== Funcao de Refresh ==========================
 app.get('/shared_refresh', (req, res) => {
 
     let auxdate = req.cookies.date;
     let str = "";
 
     db.collection('upload').find({ date:{ $gte: new Date(auxdate) }, privacidade: "Public" }).toArray((err, results) => {
-        console.log("auxdate: " + auxdate);
+        //console.log("auxdate: " + auxdate);
 
         results.forEach(function(value, index){
-            console.log(value);
+            //console.log(value);
             
             if(value.tipo != "jpg" && value.tipo != "png")
             {
@@ -351,12 +352,30 @@ app.get('/shared_refresh', (req, res) => {
             str += "<div style=\"display:flex; justify-content:center; align-items: center; margin-bottom: 10px; color: white; font-size: 14px\"><span>" + value.name + "." + value.tipo + "<br>User: " + value.username + "</span></div></div>";
         });
 
-        console.log(str);
+        //console.log(str);
 
         res.clearCookie('date');
         res.cookie('date', new Date());
 
         res.end(str);
         
+    });
+});
+
+app.post('/livesearch', (req, res) => {
+    let busca = req.body.busca_parametro;
+    let string = "";
+
+    db.collection('upload').find({ name: { $regex: busca }, privacidade: "Public" }).toArray((err, results) => {
+        if (results != null) {
+            results.forEach((result, index) => {
+                console.log(result.name);
+                string += "<span style='color: white' onclick= \"setValue('"+ result.name +"')\">" + result.name + "</span><br/>";
+            });
+        }
+
+        console.log(string);
+        res.end(string);
+    
     });
 });

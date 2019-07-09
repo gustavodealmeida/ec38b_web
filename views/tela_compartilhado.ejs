@@ -1,35 +1,38 @@
 <!DOCTYPE html>
 <html>
+
     <head>
         <meta http-equiv="content-Language" content="pt-br" charset="UTF-8">
         <link rel="fluid-icon" herf="/images/fluidicon.png" title="GitHub">
-        <link rel="icon" type="image/x-icon" href="/images/favicon.ico"/>
+        <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
         <title>The world’s leading software development platform · GitHub</title>
-        <meta name="description" content=   "GitHub brings together the world’s largest community of developers to discover,
+        <meta name="description" content="GitHub brings together the world’s largest community of developers to discover,
                                             share, and build better software. From open source projects to private team repositories,
                                             we’re your all-in-one platform for collaborative development.">
         <link rel="stylesheet" type="text/css" href="../style/style.css">
+
     </head>
+
     <body>
         <!--Cabeçalho-->
         <div class="cabecalho">
             <div class="cabe_01">
-        
+
                 <ul class="ul_01">
                     <li class="li_01 "><a class="a_aa" href="/"><img src="../images/logo.jpg"></img></a></li>
                     <li class="li_02 up"><a class="a_a1up" href="logout">Logout</a></li>
                     <li class="li_02 some"><a class="a_a1" style="padding-left: 12px; padding-right: 24px;"
-                    href="/tela_compartilhado"><%= username %></a></li>
-                    
+                            href="/tela_compartilhado"><%= username %></a></li>
 
-                <!--    <li class="li_02 some" style="height: 41px"><a class="a_a1" style="padding: 0px;"><span
+
+                    <!--    <li class="li_02 some" style="height: 41px"><a class="a_a1" style="padding: 0px;"><span
                                 class="teste"></span><img src="images/search.jpg"></img></span></a></li>
                 -->
                 </ul>
             </div>
-        
+
         </div>
-        
+
         <!--Corpo-->
         <div class="corpo2">
             <!--Colocando uma div a mais para teste-->
@@ -37,9 +40,11 @@
                 <div class="topo_busca">
                     <div class="search_busca" id='test'>
                         <form action="/busca_compartilhado" method="post">
-                            <input type="text" class="search_busca" name="busca" placeholder="Search Files"/>
-                            <img src="../images/barra.svg" class="search" alt="Buscar"/>
-                        </form> 
+                            <input type="text" class="search_busca" name="busca" id="livesearch"
+                                placeholder="Search Files" value="" autocomplete="off" />
+                            <img src="../images/barra.svg" class="search" alt="Buscar" />
+                            <div id="resultado" style="overflow: hidden;"></div> <!-- Mostrar lista de sugeridos -->
+                        </form>
                     </div>
                 </div>
 
@@ -49,64 +54,70 @@
                     <span id="refresh">
 
                     </span>
-                <% data.forEach(function(details) 
+                    <% data.forEach(function(details) 
                 { %>
                     <div class="img_up">
                         <%if (details.tipo != 'jpg' && details.tipo != 'png') 
                         { %>
-                            <%if (  details.tipo == 'mp4' || details.tipo == 'avi' || details.tipo == 'mpg' || 
+                        <%if (  details.tipo == 'mp4' || details.tipo == 'avi' || details.tipo == 'mpg' || 
                                     details.tipo == 'wmv' || details.tipo == '3gp' || details.tipo == 'mkv' ||
                                     details.tipo == 'flv' || details.tipo == 'm4v' || details.tipo == 'mov' ||
                                     details.tipo == 'mkv') 
                             { %>
-                                <div>
-                                    <a href="../public/upload/<%= details.name %>.<%= details.tipo %>" target="_blank">
-                                        <img src="../public/upload/type/video.png" height="125" width="125" alt="<%= details.name %>"></img>
-                                    </a>
-                                </div>
-                            <% } 
+                        <div>
+                            <a href="../public/upload/<%= details.name %>.<%= details.tipo %>" target="_blank">
+                                <img src="../public/upload/type/video.png" height="125" width="125"
+                                    alt="<%= details.name %>"></img>
+                            </a>
+                        </div>
+                        <% } 
                             else if (   details.tipo == 'mp3' || details.tipo == 'm4a' || details.tipo == 'aac' || 
                                         details.tipo == 'ogg' || details.tipo == 'wma' || details.tipo == 'flac' ||
                                         details.tipo == 'wav')
                             { %>
-                                <div>
-                                    <a href="../public/upload/<%= details.name %>.<%= details.tipo %>" target="_blank">
-                                        <img src="../public/upload/type/audio.png" height="125" width="125" alt="<%= details.name %>"></img>
-                                    </a>
-                                </div>
-                            <% } 
+                        <div>
+                            <a href="../public/upload/<%= details.name %>.<%= details.tipo %>" target="_blank">
+                                <img src="../public/upload/type/audio.png" height="125" width="125"
+                                    alt="<%= details.name %>"></img>
+                            </a>
+                        </div>
+                        <% } 
                             else if (   details.tipo == 'css' || details.tipo == 'exe' || details.tipo == 'html' || 
                                         details.tipo == 'pdf' || details.tipo == 'rar' || details.tipo == 'txt' ||
                                         details.tipo == 'zip'){ %>
-                                <div>
-                                    <a href="../public/upload/<%= details.name %>.<%= details.tipo %>" target="_blank">
-                                        <img src="../public/upload/type/<%= details.tipo %>.png" height="125" width="125" alt="<%= details.name %>"></img>
-                                    </a>
-                                </div>
-                            <% } 
+                        <div>
+                            <a href="../public/upload/<%= details.name %>.<%= details.tipo %>" target="_blank">
+                                <img src="../public/upload/type/<%= details.tipo %>.png" height="125" width="125"
+                                    alt="<%= details.name %>"></img>
+                            </a>
+                        </div>
+                        <% } 
                             else {%>
-                                <div>
-                                    <a href="../public/upload/<%= details.name %>.<%= details.tipo %>" target="_blank">
-                                        <img src="../public/upload/type/file.png" height="125" width="125" alt="<%= details.name %>"></img>
-                                    </a>
-                                </div>
-                            <% } %>
+                        <div>
+                            <a href="../public/upload/<%= details.name %>.<%= details.tipo %>" target="_blank">
+                                <img src="../public/upload/type/file.png" height="125" width="125"
+                                    alt="<%= details.name %>"></img>
+                            </a>
+                        </div>
+                        <% } %>
                         <% } 
                         else { %>
-                            <div>
-                                <a href="../public/upload/<%= details.name %>.<%= details.tipo %>" target="_blank">
-                                    <img src="../public/upload/<%= details.name %>.<%= details.tipo %>" height="125" width="125" alt="<%= details.name %>"></img>
-                                </a>
-                            </div>
+                        <div>
+                            <a href="../public/upload/<%= details.name %>.<%= details.tipo %>" target="_blank">
+                                <img src="../public/upload/<%= details.name %>.<%= details.tipo %>" height="125"
+                                    width="125" alt="<%= details.name %>"></img>
+                            </a>
+                        </div>
                         <% } %>
 
-                        <div style="display:flex; justify-content:center; align-items: center; margin-bottom: 10px; color: white; font-size: 14px">
+                        <div
+                            style="display:flex; justify-content:center; align-items: center; margin-bottom: 10px; color: white; font-size: 14px">
                             <span><%= details.name %>.<%= details.tipo %><br>User: <%= details.username %></span>
 
                         </div>
                     </div>
-                    
-                <% }) %>
+
+                    <% }) %>
 
                 </div>
 
@@ -119,19 +130,51 @@
             </div>
         </div>
 
-    <script type="text/javascript" charset="utf-8">
-        var refresh = document.querySelector('#refresh');
-        setInterval(function(){
-            var xmlhttp = new XMLHttpRequest();
-            xmlhttp.open("GET", "shared_refresh", true);
-            xmlhttp.onreadystatechange = function(){
-                if(this.readyState == 4 && this.status == 200){
-                    document.getElementById("refresh").innerHTML = xmlhttp.responseText + document.getElementById("refresh").innerHTML;                    
+        <script type="text/javascript" charset="utf-8">
+            var refresh = document.querySelector('#refresh');
+            setInterval(function () {
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.open("GET", "shared_refresh", true);
+                xmlhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        document.getElementById("refresh").innerHTML = xmlhttp.responseText + document.getElementById("refresh").innerHTML;
+                    }
+                };
+                xmlhttp.send();
+            }, 5000);
+
+            //Função de Live-Search
+            document.getElementsByTagName("input")[0]
+                .addEventListener("keyup", function () {
+                    var busca = document.getElementById("livesearch").value;
+                    var resultado = document.getElementById("resultado");
+                    var xmlhttp = new XMLHttpRequest();
+
+                    if (busca == "") {
+                        resultado.innerHTML = "";
+                        resultado.style.padding = "0px";
+                        return;
+                    }
+
+                    xmlhttp.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            resultado.innerHTML = xmlhttp.responseText;
+                            resultado.style.padding = '5px';
+                        }
+                    }
+
+                    xmlhttp.open("POST", "livesearch", true);
+                    xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                    xmlhttp.send("busca_parametro=" + busca);
+                });
+
+                function setValue(str) {
+                    document.getElementById("livesearch").value = str;
+                    document.getElementById("resultado").innerHTML = "";
+                    document.getElementById("resultado").style.padding = "0px";
                 }
-            };
-            xmlhttp.send();
-        }, 5000);
-    </script>
-        
+        </script>
+
     </body>
+
 </html>
