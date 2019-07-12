@@ -341,20 +341,25 @@ app.post('/trocar_senha', function (req, res, next) {
         let old_password = req.body.old_password;
         let new_password = req.body.new_password;
         //let json_aux = "";
-        db.collection('user').findOne({ username: req.session.username}, (err, result) => {
-            if (err || !result){
-                res.end('{"mensagem": "Error"}');
-            }else{
+        db.collection('user').findOne({ username: req.session.username }, (err, result) => {
+            if (err || !result) {
+                res.end('{"mensagem": "Error Find"}');
+            } else {
                 if (result.password === old_password) {
                     result.password = new_password;
-                    res.end('{"mensagem": "Password Updated"}');
+                    db.collection('user').updateOne({ username: result.username }, { $set: {password: new_password}}, { upsert: false }, (err2, result2) => {
+                        if (err2 || !result2)
+                            res.end('{"mensagem": "Error Update"}');
+                        else
+                            res.end('{"mensagem": "Password Updated"}');
+                    });
                 } else {
                     res.end('{"mensagem":"Old Password Wrong"}');
                 }
             }
         });
-        
-    }else{
+
+    } else {
         res.redirect('/login');
     }
 });
