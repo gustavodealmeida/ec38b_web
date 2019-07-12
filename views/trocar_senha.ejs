@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>Join GitHub</title>
+
+        <meta http-equiv="content-Language" content="pt-br" charset="UTF-8">
+        <link rel="fluid-icon" herf="/images/fluidicon.png" title="GitHub">
+        <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
+        <title>The world’s leading software development platform · GitHub</title>
+        <meta name="description" content="GitHub brings together the world’s largest community of developers to discover,
+                                                    share, and build better software. From open source projects to private team repositories,
+                                                    we’re your all-in-one platform for collaborative development.">
+        <link rel="stylesheet" type="text/css" href="/style/style.css">
+    </head>
+
+    <body>
+        <!--Cabeçalho-->
+        <div class="cabecalho">
+            <div class="cabe_01">
+                <ul class="ul_01">
+                    <ul class="ul_01">
+                        <li class="li_01 "><a class="a_aa" href="/"><img src="../images/logo.jpg"></img></a></li>
+                        <li class="li_02 up"><a class="a_a1up" href="logout">Logout</a></li>
+                        <li class="li_02 some"><a class="a_a1" style="padding-left: 12px; padding-right: 24px;"
+                                href="/tela_compartilhado"><%= username %></a></li>
+
+                    </ul>
+                </ul>
+            </div>
+        </div>
+
+
+        <!--Div que alinha centralmente elementos da página-->
+        <div class="teste">
+            <h2>CHANGE PASSAWORD</h2>
+            <!--<form id="form_password"> -->
+                <label class="formulario">Old Password</label>
+                <input class="corpo" type="password" name="old_password" id="old_password" value="">
+
+                <label class="formulario">New Password</label>
+                <input class="corpo" type="password" name="new_password" id="new_password" value="">
+                <button id="enviar" class="Sign-Up" onclick="sendFormulario()">Change</button>
+            <!-- </form> -->
+            <div id="mensagem"></div>
+        </div>
+
+        <script type="text/javascript" charset="utf-8">
+            $(document.getElementById("new_password")).keypress(function (e) {
+                    if (e.which == 13) {
+                        sendFormulario();
+                    }
+            });
+
+            function sendFormulario() {
+                    let form = document.getElementById("form_password");
+                    //let formData = new formData(form);
+                    
+                    let old_password = document.getElementById("old_password").value;
+                    let new_password = document.getElementById("new_password").value;
+                    let mensagem = document.getElementById("mensagem");
+                    let xmlhttp = new XMLHttpRequest();
+
+                    xmlhttp.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            //Tranformando String em elemento JSON
+                            let myJson = JSON.parse(xmlhttp.responseText);
+                            
+                            mensagem.innerHTML = myJson.mensagem;
+                            mensagem.style.padding = '5px';
+                        }
+                    }
+                    //Fazendo requisição do tipo POST
+                    xmlhttp.open("POST", "/trocar_senha", true);
+                    xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                    xmlhttp.send("old_password=" + old_password + "&new_password=" + new_password);
+                }
+        </script>
+    </body>
+
+</html>

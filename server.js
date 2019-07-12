@@ -326,76 +326,108 @@ app.post('/busca_compartilhado', (req, res) =>
     
 });
 
+//============== Tela para trocar de senha ==============================
+app.get("/trocar_senha", (req, res, next) => {
+    if (req.session && req.session.username) {
+        res.render('trocar_senha.ejs', {username: req.session.username});
+    } else {
+        res.redirect('/login');
+    }
+});
+
+//Trocando a senha do usuario utilizando xmlhttp request
+app.post('/trocar_senha', function (req, res, next) {
+    if (req.session && req.session.username) {
+        let old_password = req.body.old_password;
+        let new_password = req.body.new_password;
+        //let json_aux = "";
+        db.collection('user').findOne({ username: req.session.username}, (err, result) => {
+            if (err || !result){
+                res.end('{"mensagem": "Error"}');
+            }else{
+                if (result.password === old_password) {
+                    result.password = new_password;
+                    res.end('{"mensagem": "Password Updated"}');
+                } else {
+                    res.end('{"mensagem":"Old Password Wrong"}');
+                }
+            }
+        });
+        
+    }else{
+        res.redirect('/login');
+    }
+});
+
+
 //====================== Funcao de Refresh ==========================
 app.get('/shared_refresh', (req, res) => {
 
     let auxdate = req.cookies.date;
-    let str = "";
 
-    db.collection('upload').find({ date:{ $gte: new Date(auxdate) }, privacidade: "Public" }).toArray((err, results) => {
-        //console.log("auxdate: " + auxdate);
-
-        results.forEach(function(value, index){
-            //console.log(value);
-            
-            if(value.tipo != "jpg" && value.tipo != "png")
-            {
-                str += "<div class=\"img_up\">" + "<div><a href=\"../public/upload/" + value.name + "." + value.tipo + "\" target=\"_blank\"><img src=\"../public/upload/type/file.png\" height=\"125\" width=\"125\" alt=\"" + value.name + "\"></img></a></div>";
-            }
-            
-            else
-            {
-                str += "<div class=\"img_up\">" + "<div><a href=\"../public/upload/" + value.name + "." + value.tipo + "\" target=\"_blank\"><img src=\"../public/upload/" + value.name + "." + value.tipo + "\" height=\"125\" width=\"125\" alt=\"" + value.name + "\"></img></a></div>";
-            }
-
-            str += "<div style=\"display:flex; justify-content:center; align-items: center; margin-bottom: 10px; color: white; font-size: 14px\"><span>" + value.name + "." + value.tipo + "<br>User: " + value.username + "</span></div></div>";
-        });
-
-        //console.log(str);
-
+    db.collection('upload').find({ date: { $gte: new Date(auxdate) }, privacidade: "Public" }).toArray((err, results) => {
+        
         res.clearCookie('date');
         res.cookie('date', new Date());
+       console.log(results);
 
-        res.end(str);
-        
+        if(err || !results){
+            res.end(JSON.stringify('[]'));
+        }else{
+            res.end(JSON.stringify(results));
+        }
+
     });
 });
 
 //================ Funcao de Live Search ================================
-app.post('/livesearch', (req, res) => {
-    let busca = req.body.busca_parametro;
-    let string = "";
+app.get('/livesearch/:busca_parametro', (req, res) => {
+    let busca = req.params.busca_parametro;
+    let stringJson = '[';
 
     db.collection('upload').find({ name: { $regex: busca, $options: 'i' }, privacidade: "Public" }).toArray((err, results) => {
         if (results != null) {
+            console.log(results.name);
             results.forEach((result, index) => {
-                console.log(result.name);
-                string += "<div onclick= \"setValue('" + result.name + "')\"><span style='color: white' >" + result.name + "</span></div>";
+                //console.log(result.name);
+                //string += "<div onclick= \"setValue('" + result.name + "')\"><span style='color: white' >" + result.name + "</span></div>";
+                if (index == 0) {
+                    stringJson += '{"name":"' + result.name + '"}';
+                } else {
+                    stringJson += ', {"name":"' + result.name + '"}';
+                }
             });
+            stringJson += ']';
         }
 
-        console.log(string);
-        res.end(string);
-
+        //console.log(stringJson);
+        res.end(stringJson);
     });
 });
 
 // Live-search para private
-app.post('/livesearch_private', (req, res) => {
+app.get('/livesearch_private/:busca_parametro', (req, res) => {
     if (req.session && req.session.username) {
-        let busca = req.body.busca_parametro;
-        let string = "";
+        let busca = req.params.busca_parametro;
+        let stringJson = '[';
 
         db.collection('upload').find({username: req.session.username , name: { $regex: busca, $options: 'i' }}).toArray((err, results) => {
             if (results != null) {
                 results.forEach((result, index) => {
-                    console.log(result.name);
-                    string += "<div onclick= \"setValue('" + result.name + "')\"><span style='color: white' >" + result.name + "</span></div>";
+                    //console.log(index);
+                    //string += "<div onclick= \"setValue('" + result.name + "')\"><span style='color: white' >" + result.name + "</span></div>";
+                    if(index==0){
+                        stringJson += '{"name":"' + result.name + '"}';
+                    }else{
+                        stringJson += ', {"name":"' + result.name + '"}';
+                    }
                 });
+                stringJson += ']';
             }
 
-            console.log(string);
-            res.end(string);
+            //let myJson = JSON.stringify(stringJson);
+            console.log(stringJson);
+            res.end(stringJson);
 
         });
     }

@@ -23,11 +23,8 @@
                     <li class="li_02 up"><a class="a_a1up" href="logout">Logout</a></li>
                     <li class="li_02 some"><a class="a_a1" style="padding-left: 12px; padding-right: 24px;"
                             href="/tela_compartilhado"><%= username %></a></li>
+                <li class="li_02"><a class="a_a1" style="padding-left: 12px; padding-right: 24px;" href="/trocar_senha">Change Password</a></li>
 
-
-                    <!--    <li class="li_02 some" style="height: 41px"><a class="a_a1" style="padding: 0px;"><span
-                                class="teste"></span><img src="images/search.jpg"></img></span></a></li>
-                -->
                 </ul>
             </div>
 
@@ -43,7 +40,7 @@
                             <input type="text" class="search_busca" name="busca" id="livesearch"
                                 placeholder="Search Files" value="" autocomplete="off" />
                             <img src="../images/barra.svg" class="search" alt="Buscar" />
-                            <div id="resultado" style="overflow: hidden;"></div> <!-- Mostrar lista de sugeridos -->
+                            <div id="sugestoes" style="overflow: hidden;"></div> <!-- Mostrar lista de sugeridos -->
                         </form>
                     </div>
                 </div>
@@ -133,14 +130,35 @@
             setInterval(function () {
                 var xmlhttp = new XMLHttpRequest();
                 xmlhttp.open("GET", "shared_refresh", true);
+
                 xmlhttp.onreadystatechange = function () {
+                    document.getElementById("carregando").innerHTML = "<img src='../images/carregando.gif' alt='loading...' />" //Progress indicator
                     if (this.readyState == 4 && this.status == 200) {
+                        //Tranformando String em elemento JSON
+                        let results = JSON.parse(xmlhttp.responseText);
+                        let str = "";
+                        
+                        //Percorrendo todos os objetos do JSON retonado pelo servidor
+                        results.forEach(function (value, index) {
+                            //console.log(value);
+
+                            if (value.tipo != "jpg" && value.tipo != "png") {
+                                str += "<div class=\"img_up\">" + "<div><a href=\"../public/upload/" + value.name + "." + value.tipo + "\" target=\"_blank\"><img src=\"../public/upload/type/file.png\" height=\"125\" width=\"125\" alt=\"" + value.name + "\"></img></a></div>";
+                            }
+
+                            else {
+                                str += "<div class=\"img_up\">" + "<div><a href=\"../public/upload/" + value.name + "." + value.tipo + "\" target=\"_blank\"><img src=\"../public/upload/" + value.name + "." + value.tipo + "\" height=\"125\" width=\"125\" alt=\"" + value.name + "\"></img></a></div>";
+                            }
+
+                            str += "<div style=\"display:flex; justify-content:center; align-items: center; margin-bottom: 10px; color: white; font-size: 14px\"><span>" + value.name + "." + value.tipo + "<br>User: " + value.username + "</span></div></div>";
+                        });
+
+                        //DIV sugestoes recebe código html para adicionar na página de forma dinâmica
                         document.getElementById("carregando").innerHTML = "";
-                        document.getElementById("refresh").innerHTML = xmlhttp.responseText + document.getElementById("refresh").innerHTML;
-                    }else{
-                        document.getElementById("carregando").innerHTML = "<img src='../images/carregando.gif' alt='loading...' />" //Progress indicator
+                        document.getElementById("refresh").innerHTML = str + document.getElementById("refresh").innerHTML;
                     }
-                };
+                }
+
                 xmlhttp.send();
             }, 5000);
 
@@ -148,33 +166,45 @@
             document.getElementsByTagName("input")[0]
                 .addEventListener("keyup", function () {
                     let busca = document.getElementById("livesearch").value;
-                    let resultado = document.getElementById("resultado");
+                    let sugestoes = document.getElementById("sugestoes");
                     let xmlhttp = new XMLHttpRequest();
+                    
 
                     if (busca == "") {
-                        resultado.innerHTML = "";
-                        resultado.style.padding = "0px";
+                        sugestoes.innerHTML = "";
+                        sugestoes.style.padding = "0px";
                         return;
                     }
 
                     xmlhttp.onreadystatechange = function () {
+                        document.getElementById("sugestoes").innerHTML = "<span style='color: white'>loading...</span>"; //Progress indicator
+                        sugestoes.style.padding = '5px';
                         if (this.readyState == 4 && this.status == 200) {
-                            resultado.innerHTML = xmlhttp.responseText;
-                            resultado.style.padding = '5px';
-                        }else{
-                            document.getElementById("resultado").innerHTML = "<span style='color: white'>loading...</span>"; //Progress indicator
+                            //Tranformando String em elemento JSON
+                            let myJson = JSON.parse(xmlhttp.responseText);
+                            let string = "";
+
+                            //Percorrendo todos os objetos do JSON retonado pelo servidor
+                            myJson.forEach((result, index) => {
+                                //String auxiliar para para inserção de elemento no HTML
+                                string += "<div onclick= \"setValue('" + result.name + "')\"><span style='color: white' >"
+                                    + result.name + "</span></div>";
+                            });
+
+                            //DIV sugestoes recebe código html para adicionar na página de forma dinâmica 
+                            sugestoes.innerHTML = string;
                         }
                     }
 
-                    xmlhttp.open("POST", "livesearch", true);
-                    xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                    xmlhttp.send("busca_parametro=" + busca);
+                    //Fazendo requisição GET tendo o texto de busca como parâmetro para manipulação no lado servidor
+                    xmlhttp.open("GET", "livesearch/" + busca, true);
+                    xmlhttp.send();
                 });
 
                 function setValue(str) {
                     document.getElementById("livesearch").value = str;
-                    document.getElementById("resultado").innerHTML = "";
-                    document.getElementById("resultado").style.padding = "0px";
+                    document.getElementById("sugestoes").innerHTML = "";
+                    document.getElementById("sugestoes").style.padding = "0px";
 
                 }
 

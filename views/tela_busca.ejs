@@ -39,7 +39,7 @@
                         <form action="/busca" method="post">
                             <input type="text" class="search_busca" name="busca" id="livesearch" autocomplete="off" placeholder="Search Files"/>
                             <img src="../images/barra.svg" class="search" alt="Buscar"/>
-                            <div id="resultado" style="overflow: hidden;"></div> <!-- Mostrar lista de sugeridos -->
+                            <div id="sugestoes" style="overflow: hidden;"></div> <!-- Mostrar lista de sugeridos -->
                         </form> 
                     </div>
                     
@@ -124,33 +124,48 @@
             document.getElementsByTagName("input")[0]
                 .addEventListener("keyup", function () {
                     let busca = document.getElementById("livesearch").value;
-                    let resultado = document.getElementById("resultado");
+                    let sugestoes = document.getElementById("sugestoes");
                     let xmlhttp = new XMLHttpRequest();
 
                     if (busca == "") {
-                        resultado.innerHTML = "";
-                        resultado.style.padding = "0px";
+                        sugestoes.innerHTML = "";
+                        sugestoes.style.padding = "0px";
                         return;
                     }
 
+                    
+
                     xmlhttp.onreadystatechange = function () {
+                        document.getElementById("sugestoes").innerHTML = "<span style='color: white'>loading...</span>"; //Progress indicator
+                        sugestoes.style.padding = '5px';
                         if (this.readyState == 4 && this.status == 200) {
-                            resultado.innerHTML = xmlhttp.responseText;
-                            resultado.style.padding = '5px';
-                        } else {
-                            document.getElementById("resultado").innerHTML = "<span style='color: white'>loading...</span>"; //Progress indicator
+                            //Tranformando String em elemento JSON
+                            let myJson = JSON.parse(xmlhttp.responseText);
+                            let string = "";
+                            
+                            //Percorrendo todos os objetos do JSON retonado pelo servidor
+                            myJson.forEach((result, index) => {
+                                //String auxiliar para para inserção de elemento no HTML
+                                string +=   "<div onclick= \"setValue('" + result.name + "')\"><span style='color: white' >" 
+                                            + result.name + "</span></div>";
+                            });
+
+                            //DIV sugestoes recebe código html para adicionar na página de forma dinâmica 
+                            sugestoes.innerHTML = string;
+                            
                         }
                     }
 
-                    xmlhttp.open("POST", "livesearch_private", true);
-                    xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                    xmlhttp.send("busca_parametro=" + busca);
+                    //Fazendo requisição GET tendo o texto de busca como parâmetro para manipulação no lado servidor
+                    xmlhttp.open("GET", "livesearch_private/" + busca, true);
+                    xmlhttp.send();
                 });
 
+            //Função para limpar as a div de sugestões e preencher o input o texto pesquisado
             function setValue(str) {
                 document.getElementById("livesearch").value = str;
-                document.getElementById("resultado").innerHTML = "";
-                document.getElementById("resultado").style.padding = "0px";
+                document.getElementById("sugestoes").innerHTML = "";
+                document.getElementById("sugestoes").style.padding = "0px";
 
             }
 
